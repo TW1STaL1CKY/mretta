@@ -1,0 +1,9 @@
+"Mretta Base"
+{
+	"base"		"base"
+	"title"		"Mretta Base"
+	"menusystem"	"1"
+	"settings"
+	{
+	}
+}

@@ -17,7 +17,7 @@ and it includes helper functions to help you flesh out your minigame faster and 
 - Pre-built HUD that is able to be replaced if need be
 - On-HUD alerts
 
-<br>
+----
 
 ### Can I make a minigame?
 
@@ -25,7 +25,7 @@ Sure, I encourage developers to make their own minigames for Mretta! I would lik
 
 To create a Mretta minigame, create a new gamemode with *mretta_* prefixed in its name, and derive it off the *mretta_base* gamemode. Find more details on the FAQ.
 
-<br>
+----
 
 ### Can I contribute to the base?
 

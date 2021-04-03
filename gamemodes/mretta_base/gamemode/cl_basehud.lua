@@ -1,5 +1,9 @@
 module("mretta",package.seeall)
 
+_G.MRETTAHUD_LINE_NONE = 0
+_G.MRETTAHUD_LINE_LEFT = 1
+_G.MRETTAHUD_LINE_RIGHT = 2
+
 local barHeight = 10
 local barLerpWidth = 1
 
@@ -46,12 +50,14 @@ local function alphaBlink(col,amount)
 	return ColorAlpha(col,alphaBlinkInt(col.a-amount,amount))
 end
 
-function DrawHudPanel(x,y,w,h,lineOnRight,drawFunc)
+function DrawHudPanel(x,y,w,h,lineEnum,drawFunc)
 	surface.SetDrawColor(HudBackground)
 	surface.DrawRect(x,y,w,h)
 
-	surface.SetDrawColor(HudForeground)
-	surface.DrawRect(lineOnRight and x+w or x-5,y-HudPaddingY,5,h+(HudPaddingY*2))
+	if lineEnum > _G.MRETTAHUD_LINE_NONE then
+		surface.SetDrawColor(HudForeground)
+		surface.DrawRect(lineEnum == _G.MRETTAHUD_LINE_RIGHT and x+w or x-5,y-HudPaddingY,5,h+(HudPaddingY*2))
+	end
 
 	local sW,sH = ScrW(),ScrH()
 
@@ -114,7 +120,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 		surface.SetAlphaMultiplier(alphaBlinkInt(0.98,0.02))
 	end
 
-	DrawHudPanel(HudMarginX,sH-HudMarginY-h,w,h,false,function()
+	DrawHudPanel(HudMarginX,sH-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_LEFT,function()
 		surface.SetFont(FontLarge)
 		surface.SetTextColor(col)
 		surface.SetTextPos(0,0)
@@ -178,7 +184,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 		surface.SetAlphaMultiplier(alphaBlinkInt(0.98,0.02))
 	end
 
-	DrawHudPanel(sW-HudMarginX-w,sH-HudMarginY-h,w,h,true,function()
+	DrawHudPanel(sW-HudMarginX-w,sH-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 		col = warning and alphaBlink(HudForeground,100) or HudForeground
 
 		local xPos = w-(HudPaddingX*2)
@@ -210,7 +216,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 
 		h = altH+(HudPaddingY*2)
 
-		DrawHudPanel(sW-HudMarginX-w,sH-primaryH-HudPaddingY-HudMarginY-h,w,h,true,function()
+		DrawHudPanel(sW-HudMarginX-w,sH-primaryH-HudPaddingY-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 			surface.SetFont(FontLarge)
 			surface.SetTextColor(col)
 			surface.SetTextPos(w-(HudPaddingX*2)-altW,0)

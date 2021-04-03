@@ -121,7 +121,7 @@ hook.Add("HUDPaint",_hkHud,function()
 
 	local w,h = math.max(timeW,roundW,180)+(mretta.HudPaddingX*2),timeH+roundH+(mretta.HudPaddingY*3)
 
-	mretta.DrawHudPanel(mretta.HudMarginX,mretta.HudMarginY,w,h,false,function()
+	mretta.DrawHudPanel(mretta.HudMarginX,mretta.HudMarginY,w,h,_G.MRETTAHUD_LINE_LEFT,function()
 		if gameStarted then
 			surface.SetFont(mretta.FontLarge)
 			surface.SetTextColor(ColorAlpha(mretta.HudForeground,timeEnabled and IsInOvertime() and 155+(math.sin(RealTime()*15)*100) or 255))

@@ -12,15 +12,12 @@ hook.Add("HUDPaint",hkHud,function()
 	surface.SetFont(mretta.FontLarge)
 	local txtW,txtH = surface.GetTextSize(pressToReadyText)
 
-	local w,h = txtW+(mretta.HudPaddingX*2),(txtH*2)+(mretta.HudPaddingY*2)
+	local w,h = txtW+(mretta.HudPaddingX*2),txtH+(mretta.HudPaddingY*2)
 
-	mretta.DrawHudPanel(ScrW()-mretta.HudMarginX-w,ScrH()-mretta.HudMarginY-h,w,h,true,function()
+	mretta.DrawHudPanel(ScrW()-mretta.HudMarginX-w,ScrH()-mretta.HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 		surface.SetFont(mretta.FontLarge)
 		surface.SetTextColor(mretta.HudForeground)
 		surface.SetTextPos(0,0)
-		surface.DrawText(GAMEMODE.Name)
-
-		surface.SetTextPos(0,txtH)
 		surface.DrawText(pressToReadyText)
 	end)
 end)

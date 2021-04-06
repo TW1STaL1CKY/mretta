@@ -50,6 +50,10 @@ local function alphaBlink(col,amount)
 	return ColorAlpha(col,alphaBlinkInt(col.a-amount,amount))
 end
 
+function GetReadableColor(backgroundCol)
+	return ((backgroundCol.r*0.299)+(backgroundCol.g*0.587)+(backgroundCol.b*0.114)) > 160 and Color(0,0,0) or Color(255,255,255)
+end
+
 function DrawHudPanel(x,y,w,h,lineEnum,drawFunc)
 	surface.SetDrawColor(HudBackground)
 	surface.DrawRect(x,y,w,h)

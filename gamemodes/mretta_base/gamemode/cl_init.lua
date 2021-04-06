@@ -1,9 +1,9 @@
-module("mretta",package.seeall)
-
 include("shared.lua")
 include("sh_util.lua")
 include("cl_alerts.lua")
 include("cl_basehud.lua")
+include("scoreboard/cl_scoreboard.lua")
+include("scoreboard/cl_scoreboard_derma.lua")
 include("sfx/cl_music.lua")
 include("rounds/shared.lua")
 include("rounds/cl_init.lua")

@@ -60,6 +60,10 @@ end)
 -- Base gamemode functionality
 function GM:PlayerInitialSpawn(pl)
 	pl:SetTeam(TEAM_SPECTATOR)
+
+	if pl:IsBot() then
+		GAMEMODE:PrePlayerReadyForMinigame(pl)
+	end
 end
 
 function GM:PlayerSpawn(pl)

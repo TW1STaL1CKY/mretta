@@ -1,3 +1,18 @@
+local function cleanseTable(tbl)
+	local dirty = next(tbl) != nil
+
+	while dirty do
+		dirty = false
+
+		for k,v in next,tbl do
+			if not IsValid(v) then
+				table.remove(tbl,k)
+				dirty = true
+			end
+		end
+	end
+end
+
 -- Scoreboard Row
 local controlNameRow = "MrettaScoreboardPlayerRow"
 local PANEL = {}
@@ -23,6 +38,7 @@ function PANEL:SetPlayer(pl)
 	self.AvatarPanel:SetSize(self.AvatarSize,self.AvatarSize)
 	self.AvatarPanel:SetPos(self.PaddingX,0)
 	self.AvatarPanel:SetPlayer(pl,self.AvatarSize)
+	self.AvatarPanel:SetPaintedManually(true)
 end
 
 function PANEL:DoClick()
@@ -30,11 +46,8 @@ function PANEL:DoClick()
 end
 
 function PANEL:OnRemove()
-	if IsValid(self.AvatarPanel) then
-		self.AvatarPanel:Remove()
-	end
-
 	local parent = self:GetParent()
+
 	if IsValid(parent) and parent.PlayerRows then
 		for k,v in next,parent.PlayerRows do
 			if v == self then
@@ -51,18 +64,41 @@ function PANEL:Paint(w,h)
 
 	if self.Player then
 		if self.Player:IsValid() then
-			local name = self.Player:Name()
+			if not self.Player:Alive() then
+				surface.SetAlphaMultiplier(0.25)
+			end
+
+			self.AvatarPanel:PaintManual()
+
+			local pingMeasure = "ms"
+			local txt = self.Player:Name()
 
 			surface.SetFont(mretta.FontSmall)
-			local nameW,nameH = surface.GetTextSize(name)
+			local txtW,txtH = surface.GetTextSize(txt)
+			local txtY = (h*0.5)-(txtH*0.5)
 
 			surface.SetTextColor(mretta.HudForeground)
-			surface.SetTextPos((self.PaddingX*2)+self.AvatarSize,(h*0.5)-(nameH*0.5))
-			surface.DrawText(name)
+			surface.SetTextPos((self.PaddingX*2)+self.AvatarSize,txtY)
+			surface.DrawText(txt)
 
-			--draw score (:Frags())
+			txt = self.Player:Ping()..pingMeasure
+			txtW,txtH = surface.GetTextSize(txt)
 
-			--draw ping (:Ping().."ms")
+			local maxTxtW = surface.GetTextSize("999"..pingMeasure)
+			local txtX = w-self.PaddingX
+
+			surface.SetTextPos(txtX-txtW,txtY)
+			surface.DrawText(txt)
+
+			txt = self.Player:Frags()
+			txtW,txtH = surface.GetTextSize(txt)
+
+			txtX = txtX-txtW-maxTxtW-(self.PaddingX*2)
+
+			surface.SetTextPos(txtX,txtY)
+			surface.DrawText(txt)
+
+			surface.SetAlphaMultiplier(1)
 
 			if self.Player == LocalPlayer() then
 				surface.SetDrawColor(mretta.HudForeground)
@@ -91,7 +127,7 @@ PANEL.PaddingX = 24
 PANEL.PaddingY = 12
 
 function PANEL:Init()
-	self:SetSize(800,0)
+	self:SetSize(500,0)
 end
 
 function PANEL:CreatePlayerRow(pl)
@@ -120,6 +156,7 @@ function PANEL:PerformLayout()
 	end
 
 	for k,v in next,self.PlayerRows do
+		v:SetWide(self:GetWide())
 		v:SetPos(0,totalHeight)
 
 		totalHeight = totalHeight+v:GetTall()+(k < #self.PlayerRows and self.PaddingY*0.5 or 0)
@@ -128,6 +165,19 @@ function PANEL:PerformLayout()
 	if self:GetTall() == totalHeight then return end
 
 	self:SetTall(totalHeight)
+end
+
+function PANEL:OnRemove()
+	local parent = self:GetParent()
+
+	if IsValid(parent) and parent.TeamPanels then
+		for k,v in next,parent.TeamPanels do
+			if v == self then
+				table.remove(parent.TeamPanels,k)
+				break
+			end
+		end
+	end
 end
 
 function PANEL:Paint(w,h)
@@ -162,12 +212,18 @@ PANEL.RefreshNext = 0
 PANEL.RefreshInterval = 0.2
 
 function PANEL:Init()
-	self:SetSize(800,0)
+	self:SetSize(1000,0)
 
 	self.RefreshNext = RealTime()
 end
 
 function PANEL:CreateTeamPanel()
+	if self.TeamPanels then
+		cleanseTable(self.TeamPanels)
+	else
+		self.TeamPanels = {}
+	end
+
 	local panel = vgui.Create(controlNamePanel,self)
 
 	self.TeamPanels[#self.TeamPanels+1] = panel
@@ -179,20 +235,25 @@ function PANEL:RefreshPlayers()
 	self.RefreshNext = RealTime()+self.RefreshInterval
 
 	for k,teamPanel in next,self.TeamPanels do
+		if not teamPanel.PlayerRows then continue end
+
 		local changesMade = false
 		local pls = {}
-		local rowsToRemove = {}
 
 		for i,row in next,teamPanel.PlayerRows do
 			if row.Player and row.Player:IsValid() then
 				pls[row.Player] = true
 			else
 				changesMade = true
-				rowsToRemove[i] = row
+
+				row:Remove()
+				teamPanel.PlayerRows[i] = NULL
 			end
 		end
-		for i,row in next,rowsToRemove do
-			teamPanel.PlayerRows[i]:Remove()
+
+		-- Cleanse PlayerRows of NULL panels if a row has been removed, keeping it sequential
+		if changesMade then
+			cleanseTable(teamPanel.PlayerRows)
 		end
 
 		for i,pl in next,team.GetPlayers(teamPanel.TeamId) do
@@ -211,11 +272,16 @@ function PANEL:RefreshPlayers()
 end
 
 function PANEL:PerformLayout()
+	local halfW = self:GetWide()*0.5
+	local halfPadX = self.PaddingX*0.5
+
+	--todo: since we are making team panels be only 2 in a row, only use maxHeight for each row. also need totalHeight now.
 	local baseHeight = 0
 	local maxHeight = 0
 
 	for k,v in next,self.TeamPanels do
-		v:SetPos(0,baseHeight)
+		v:SetWide((k % 2 == 1 and k == #self.TeamPanels) and self:GetWide() or halfW-halfPadX)
+		v:SetPos(k % 2 == 1 and 0 or halfW+halfPadX,baseHeight)
 
 		local tall = v:GetTall()
 		maxHeight = tall > maxHeight and tall or maxHeight

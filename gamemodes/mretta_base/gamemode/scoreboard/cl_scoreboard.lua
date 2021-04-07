@@ -1,6 +1,8 @@
 module("mretta",package.seeall)
 
 function OpenScoreboard()
+	if voting and voting.HasVotingStarted() then return end
+
 	if IsValid(GAMEMODE.ScoreboardPanel) then
 		GAMEMODE.ScoreboardPanel:SetVisible(true)
 	else
@@ -27,10 +29,10 @@ function GM:ScoreboardShow()
 end
 
 function GM:ScoreboardHide()
+	if voting and voting.HasVotingStarted() then return end
+
 	if IsValid(GAMEMODE.ScoreboardPanel) then
 		GAMEMODE.ScoreboardPanel:SetVisible(false)
+		gui.EnableScreenClicker(false)
 	end
 end
-
---need a way to auto-refresh the scoreboard without checking things every frame
---if no good way is found, resort to updating in panels' Think

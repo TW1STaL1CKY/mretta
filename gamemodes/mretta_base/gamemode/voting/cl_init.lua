@@ -1,6 +1,10 @@
 module("voting",package.seeall)
 
 local function createVoteMenu()
+	if IsValid(GAMEMODE.ScoreboardPanel) and GAMEMODE.ScoreboardPanel:IsVisible() then
+		GAMEMODE.ScoreboardPanel:SetVisible(false)
+	end
+
 	if IsValid(_menu) then
 		for k,v in next,_menu.OptionControls do
 			v:Remove()

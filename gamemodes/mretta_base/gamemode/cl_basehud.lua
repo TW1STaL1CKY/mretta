@@ -9,6 +9,7 @@ local barLerpWidth = 1
 
 local colHurt = Color(200,50,50)
 local colArmor = Color(200,160,40)
+local colShadow = Color(0,0,0,220)
 
 local hudElements = {
 	CHudHealth = true,
@@ -138,7 +139,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 
 		local barW = w-(HudPaddingX*2)
 		local barY = h-(HudPaddingY*3)-barHeight
-		surface.SetDrawColor(HudBackground)
+		surface.SetDrawColor(colShadow)
 		surface.DrawRect(0,barY,barW,barHeight)
 
 		local currentBarFrac = currentHP/maxHP

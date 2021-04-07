@@ -64,7 +64,7 @@ function PANEL:Paint(w,h)
 
 	if self.Player then
 		if self.Player:IsValid() then
-			if not self.Player:Alive() then
+			if self.Player:Health() <= 0 or self.Player:GetMoveType() == MOVETYPE_OBSERVER then
 				surface.SetAlphaMultiplier(0.25)
 			end
 
@@ -119,7 +119,6 @@ derma.DefineControl(controlNameRow,"Player row for Mretta's scoreboard",PANEL,"D
 local controlNamePanel = "MrettaScoreboardPanel"
 PANEL = {}
 
-PANEL.PlayerRows = {}
 PANEL.DrawTeamHeader = true
 PANEL.TeamId = 1
 
@@ -128,6 +127,8 @@ PANEL.PaddingY = 12
 
 function PANEL:Init()
 	self:SetSize(500,0)
+
+	self.PlayerRows = {}
 end
 
 function PANEL:CreatePlayerRow(pl)
@@ -182,17 +183,22 @@ end
 
 function PANEL:Paint(w,h)
 	if self.DrawTeamHeader then
+		local teamCount = #team.GetPlayers(self.TeamId)
+
 		surface.SetFont(mretta.FontSmall)
-		local _,teamH = surface.GetTextSize("M")
+		local countW,txtH = surface.GetTextSize(teamCount)
 
 		local teamCol = team.GetColor(self.TeamId)
 
 		surface.SetDrawColor(teamCol.r,teamCol.g,teamCol.b,mretta.HudBackground.a)
-		surface.DrawRect(0,0,w,teamH+(self.PaddingY*2))
+		surface.DrawRect(0,0,w,txtH+(self.PaddingY*2))
 
 		surface.SetTextColor(mretta.GetReadableColor(teamCol))
 		surface.SetTextPos(self.PaddingX,self.PaddingY)
 		surface.DrawText(team.GetName(self.TeamId))
+
+		surface.SetTextPos(w-self.PaddingX-countW,self.PaddingY)
+		surface.DrawText(teamCount)
 	end
 
 	return true
@@ -204,20 +210,32 @@ derma.DefineControl(controlNamePanel,"Scoreboard's row-holding panel for Mretta"
 local controlNameBase = "MrettaScoreboard"
 PANEL = {}
 
-PANEL.TeamPanels = {}
-
 PANEL.PaddingX = 24
 PANEL.PaddingY = 12
-PANEL.RefreshNext = 0
+
 PANEL.RefreshInterval = 0.2
 
 function PANEL:Init()
 	self:SetSize(1000,0)
 
+	self.TeamPanels = {}
+	self.Spectators = {}
+
 	self.RefreshNext = RealTime()
+
+	surface.SetFont(mretta.FontLarge)
+	local _,largeH = surface.GetTextSize("M")
+
+	surface.SetFont(mretta.FontSmall)
+	local _,smallH = surface.GetTextSize("M")
+
+	self.InfoPanelHeight = largeH+smallH+(self.PaddingY*2)
+	self.SpectatorsHeight = smallH+(self.PaddingY*2)
+	self.TitleHeight = largeH
+	self.SubtitleHeight = smallH
 end
 
-function PANEL:CreateTeamPanel()
+function PANEL:CreateTeamPanel(teamId)
 	if self.TeamPanels then
 		cleanseTable(self.TeamPanels)
 	else
@@ -225,6 +243,7 @@ function PANEL:CreateTeamPanel()
 	end
 
 	local panel = vgui.Create(controlNamePanel,self)
+	panel:SetTeam(teamId)
 
 	self.TeamPanels[#self.TeamPanels+1] = panel
 
@@ -241,7 +260,7 @@ function PANEL:RefreshPlayers()
 		local pls = {}
 
 		for i,row in next,teamPanel.PlayerRows do
-			if row.Player and row.Player:IsValid() then
+			if row.Player and row.Player:IsValid() and row.Player:Team() == teamPanel.TeamId then
 				pls[row.Player] = true
 			else
 				changesMade = true
@@ -257,6 +276,12 @@ function PANEL:RefreshPlayers()
 		end
 
 		for i,pl in next,team.GetPlayers(teamPanel.TeamId) do
+			local frags = pl:Frags()
+			if frags != (pl._sc_lastFrags or 0) then
+				pl._sc_lastFrags = frags
+				changesMade = true
+			end
+
 			if pls[pl] then continue end
 
 			teamPanel:CreatePlayerRow(pl)
@@ -267,7 +292,13 @@ function PANEL:RefreshPlayers()
 
 		if changesMade then
 			table.sort(teamPanel.PlayerRows,function(a,b) return a.Player:Frags() > b.Player:Frags() end)
+			teamPanel:InvalidateLayout()
 		end
+	end
+
+	self.Spectators = {}
+	for k,v in next,team.GetPlayers(TEAM_SPECTATOR) do
+		self.Spectators[#self.Spectators+1] = v:Name()
 	end
 end
 
@@ -275,8 +306,8 @@ function PANEL:PerformLayout()
 	local halfW = self:GetWide()*0.5
 	local halfPadX = self.PaddingX*0.5
 
-	--todo: since we are making team panels be only 2 in a row, only use maxHeight for each row. also need totalHeight now.
-	local baseHeight = 0
+	--todo: since we are making team panels be only 2 in a row, only use maxHeight for each row
+	local baseHeight = self.InfoPanelHeight+self.PaddingY
 	local maxHeight = 0
 
 	for k,v in next,self.TeamPanels do
@@ -287,7 +318,7 @@ function PANEL:PerformLayout()
 		maxHeight = tall > maxHeight and tall or maxHeight
 	end
 
-	local totalHeight = baseHeight+maxHeight
+	local totalHeight = baseHeight+maxHeight+self.SpectatorsHeight+self.PaddingY
 
 	if self:GetTall() == totalHeight then return end
 
@@ -299,11 +330,32 @@ function PANEL:Think()
 	if self.RefreshNext <= RealTime() then
 		self:RefreshPlayers()
 	end
+
+	if not vgui.CursorVisible() and input.IsMouseDown(MOUSE_RIGHT) then
+		gui.EnableScreenClicker(true)
+	end
 end
 
 function PANEL:Paint(w,h)
-	--surface.SetDrawColor(mretta.HudBackground)
-	--surface.DrawRect(0,0,w,h)
+	surface.SetDrawColor(mretta.HudBackground)
+	surface.DrawRect(0,0,w,self.InfoPanelHeight)
+
+	surface.SetFont(mretta.FontLarge)
+	surface.SetTextColor(mretta.HudForeground)
+	surface.SetTextPos(self.PaddingX,self.PaddingY)
+	surface.DrawText(GAMEMODE.Name)
+
+	surface.SetFont(mretta.FontSmall)
+	surface.SetTextPos(self.PaddingX,self.PaddingY+(self.TitleHeight*0.8))
+	surface.DrawText(string.format("%s with %d players",game.GetMap(),#player.GetAll()))
+
+	local y = h-self.SpectatorsHeight
+
+	surface.DrawRect(0,y,w,self.SpectatorsHeight)
+
+	surface.SetFont(mretta.FontSmall)
+	surface.SetTextPos(self.PaddingX,y+self.PaddingY)
+	surface.DrawText(string.format("%d spectators: %s",#self.Spectators,table.concat(self.Spectators,", ")))
 
 	return true
 end

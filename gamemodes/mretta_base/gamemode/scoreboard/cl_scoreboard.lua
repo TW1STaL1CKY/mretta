@@ -33,6 +33,8 @@ function GM:ScoreboardHide()
 
 	if IsValid(GAMEMODE.ScoreboardPanel) then
 		GAMEMODE.ScoreboardPanel:SetVisible(false)
+
 		gui.EnableScreenClicker(false)
+		CloseDermaMenus()
 	end
 end

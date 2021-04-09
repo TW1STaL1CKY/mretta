@@ -25,6 +25,7 @@ function PANEL:Init()
 	local parent = self:GetParent()
 
 	self:SetSize(IsValid(parent) and parent:GetWide() or 200,self.AvatarSize)
+	self:SetMouseInputEnabled(true)
 end
 
 function PANEL:SetPlayer(pl)
@@ -41,8 +42,22 @@ function PANEL:SetPlayer(pl)
 	self.AvatarPanel:SetPaintedManually(true)
 end
 
-function PANEL:DoClick()
+function PANEL:DoRightClick()
+	if not (self.Player and self.Player:IsValid()) then return end
 
+	local menu = DermaMenu()
+
+	menu:AddOption("Copy SteamID",function() SetClipboardText(self.Player:SteamID()) end)
+	menu:AddOption("Copy SteamID64",function() SetClipboardText(self.Player:SteamID64()) end)
+	menu:AddOption("View Profile",function() self.Player:ShowProfile() end)
+
+	menu.Think = function()
+		if not (self.Player and self.Player:IsValid()) then
+			menu:Remove()
+		end
+	end
+
+	menu:Open()
 end
 
 function PANEL:OnRemove()
@@ -217,6 +232,7 @@ PANEL.RefreshInterval = 0.2
 
 function PANEL:Init()
 	self:SetSize(1000,0)
+	self:SetMouseInputEnabled(true)
 
 	self.TeamPanels = {}
 	self.Spectators = {}

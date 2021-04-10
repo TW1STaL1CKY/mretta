@@ -8,7 +8,7 @@ _hkHud = "mretta_alerts_hud"
 DefaultTime = 5
 
 local function alertsHud()
-	if not (_current and (_current.Text or _current.Markup) and _current.TimeEnd and _current.TimeEnd > RealTime()) then
+	if not (_current and (_current.Text or _current.Markup) and _current.TimeEnd and _current.TimeEnd+mretta.HudSlideInOutDur+mretta.HudSlideLineFadeDur > RealTime()) then
 		hook.Remove("HUDPaint",_hkHud)
 		return
 	end
@@ -29,7 +29,7 @@ function Display(text,seconds,silent)
 	_current.Text = text:gsub("<[^=>]+=[^>]*>","")
 	_current.Markup = markup.Parse(string.format("<color=%s><font=%s>%s",table.concat(mretta.HudForeground:ToTable(),","),mretta.FontLarge or "Default",text),ScrW()*0.75)
 	_current.TimeStart = RealTime()
-	_current.TimeEnd = _current.TimeStart+(seconds or DefaultTime or 5)+1.2
+	_current.TimeEnd = _current.TimeStart+(seconds or DefaultTime or 5)
 
 	hook.Add("HUDPaint",_hkHud,alertsHud)
 

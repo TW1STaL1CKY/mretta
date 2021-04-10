@@ -43,6 +43,9 @@ HudPaddingY = 12
 HudMarginX = 32
 HudMarginY = 48
 
+HudSlideInOutDur = 1
+HudSlideLineFadeDur = 0.2
+
 local function alphaBlinkInt(base,amount)
 	return base+(math.sin(RealTime()*15)*amount)
 end
@@ -75,23 +78,24 @@ end
 
 function DrawHudScrollInPanel(x,y,w,h,timeStart,timeEnd,drawFunc)
 	local t = RealTime()
+	local totalExtraDur = HudSlideInOutDur+HudSlideLineFadeDur
 
-	local timeLeft = timeEnd-t
+	local timeLeft = (timeEnd+totalExtraDur)-t
 	if timeLeft <= 0 then return end
 
 	local timeElapsed = t-timeStart
 	if timeElapsed <= 0 then return end
 
 	local sW,sH = ScrW(),ScrH()
-	local pos = math.EaseInOut(math.min(((timeLeft < 1.2 and timeLeft or timeElapsed)-0.2)*2,1),0,1)*w
+	local pos = math.EaseInOut(math.min(((timeLeft < totalExtraDur and timeLeft or timeElapsed)-HudSlideLineFadeDur)*((1/HudSlideInOutDur)*2),1),0,1)*w
 
-	surface.SetDrawColor(HudForeground.r,HudForeground.g,HudForeground.b,(math.min(timeLeft < 0.2 and timeLeft or timeElapsed,0.2)/0.2)*HudForeground.a)
+	surface.SetDrawColor(HudForeground.r,HudForeground.g,HudForeground.b,(math.min(timeLeft < HudSlideLineFadeDur and timeLeft or timeElapsed,HudSlideLineFadeDur)/HudSlideLineFadeDur)*HudForeground.a)
 	surface.DrawRect(x-5,y-HudPaddingY,5,h+(HudPaddingY*2))
 
 	surface.SetDrawColor(HudBackground)
 	surface.DrawRect(x,y,pos,h)
 
-	render.SetScissorRect(x+HudPaddingX,0,pos+HudMarginX-HudPaddingX,sH,true)
+	render.SetScissorRect(x+HudPaddingX,0,x+pos-HudPaddingX,sH,true)
 		render.SetViewPort(x+HudPaddingX,y+HudPaddingY,w-(HudPaddingX*2),h-(HudPaddingY*2))
 		cam.Start2D()
 		drawFunc()

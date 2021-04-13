@@ -174,8 +174,11 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 	local wep = pl:GetActiveWeapon()
 	if not (wep and wep:IsValid()) then return end
 
-	local clip1,ammo1 = wep:Clip1(),wep.Ammo1 and wep:Ammo1() or pl:GetAmmoCount(wep:GetPrimaryAmmoType())
-	local clip1Str = clip1 == -1 and "--" or clip1
+	local clip1 = wep:Clip1()
+	local hideAmmo = wep.DrawAmmo == false
+	local clip1Str = hideAmmo and "--" or clip1
+
+	local ammo1 = (hideAmmo or clip1 == -1) and 0 or (wep.Ammo1 and wep:Ammo1() or pl:GetAmmoCount(wep:GetPrimaryAmmoType()))
 	local wepName = wep:GetPrintName()
 
 	surface.SetFont(FontLarge)
@@ -185,7 +188,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 	local nameW,nameH = surface.GetTextSize(wepName)
 
 	local maxClip1 = wep:GetMaxClip1()
-	local warning = maxClip1 > 0 and (ammo1 == 0 or clip1/maxClip1 <= 0.25)
+	local warning = not hideAmmo and maxClip1 > 0 and (ammo1 == 0 or clip1/maxClip1 <= 0.25)
 
 	w,h = 320,clipH+nameH+(HudPaddingY*2)
 
@@ -196,20 +199,23 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 	DrawHudPanel(sW-HudMarginX-w,sH-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 		col = warning and alphaBlink(HudForeground,100) or HudForeground
 
+		surface.SetTextColor(col)
+
 		local xPos = w-(HudPaddingX*2)
 
-		surface.SetFont(FontLarge)
-		surface.SetTextColor(col)
-		surface.SetTextPos(xPos-clipW,0)
-		surface.DrawText(clip1Str)
+		if not hideAmmo then
+			surface.SetFont(FontLarge)
+			surface.SetTextPos(xPos-clipW,0)
+			surface.DrawText(clip1Str)
 
-		if maxClip1 > 0 then
-			surface.SetFont(FontSmall)
-			local ammoStr = ammo1.."  /  "
-			local ammoW,ammoH = surface.GetTextSize(ammoStr)
+			if maxClip1 > 0 then
+				surface.SetFont(FontSmall)
+				local ammoStr = ammo1.."  /  "
+				local ammoW,ammoH = surface.GetTextSize(ammoStr)
 
-			surface.SetTextPos(xPos-clipW-ammoW,ammoH-3)
-			surface.DrawText(ammoStr)
+				surface.SetTextPos(xPos-clipW-ammoW,ammoH-3)
+				surface.DrawText(ammoStr)
+			end
 		end
 
 		surface.SetFont(FontSmall)
@@ -217,7 +223,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 		surface.DrawText(wepName)
 	end)
 
-	local ammo2 = wep.Ammo2 and wep:Ammo2() or pl:GetAmmoCount(wep:GetSecondaryAmmoType())
+	local ammo2 = hideAmmo and 0 or (wep.Ammo2 and wep:Ammo2() or pl:GetAmmoCount(wep:GetSecondaryAmmoType()))
 	if ammo2 > 0 then
 		surface.SetFont(FontLarge)
 		local altW,altH = surface.GetTextSize(ammo2)

@@ -144,10 +144,3 @@ hook.Add("HUDPaint",_hkHud,function()
 		surface.DrawText(roundText)
 	end)
 end)
-
---hooks
---[/]	PreRoundChange
---[/]	PostRoundChange
---[/]	RoundComplete (called when the round in now in a complete state and will advance to the next one soon)
---[/]	RoundTimeAdded
---[/]	RoundTimeTick

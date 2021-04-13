@@ -70,8 +70,6 @@ function GetReadyPlayers()
 	local pls = {}
 
 	for k,v in next,player.GetAll() do
-		local team = v:Team()
-
 		if IsPlayerReady(v) then
 			pls[#pls+1] = v
 		end

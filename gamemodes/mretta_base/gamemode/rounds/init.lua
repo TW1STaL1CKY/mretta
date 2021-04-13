@@ -230,11 +230,3 @@ hook.Add("PlayerChangedTeam","rounds_help",function(pl,oldTeamId,newTeamId)
 	net.Start(_nwHelpText)
 	net.Send(pl)
 end)
-
---hooks
---[/]	PreRoundChange
---[/]	PostRoundChange
---[/]	PreRoundTimeExpire (return true to allow the round to end with a reason)
---[/]	RoundComplete (called when the round in now in a complete state and will advance to the next one soon)
---[/]	RoundTimeAdded
---[/]	GameComplete

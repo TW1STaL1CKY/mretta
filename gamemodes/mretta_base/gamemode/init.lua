@@ -35,15 +35,19 @@ include("voting/thumbs/sv_thumbs.lua")
 hook.Add("Initialize","mretta_server",function()
 	-- Disallow PAC functionality
 	if GAMEMODE.DisallowPAC then
-		hook.Add("PrePACConfigApply","mretta_pac",function(pl) return false end)
-		hook.Add("PACApplyModel","mretta_pac",function(pl) return false end)
+		local tag = "mretta_pac"
+
+		hook.Add("PrePACConfigApply",tag,function(pl) return false end)
+		hook.Add("PACApplyModel",tag,function(pl) return false end)
 	end
 
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
-		hook.Add("HandleSit","mretta_sitanywhere",function(pl) return false end)
-		hook.Add("ShouldAllowSit","mretta_sitanywhere",function(pl) return false end)
-		hook.Add("OnGroundSit","mretta_sitanywhere",function(pl) return false end)
+		local tag = "mretta_sitanywhere"
+
+		hook.Add("HandleSit",tag,function(pl) return false end)
+		hook.Add("ShouldAllowSit",tag,function(pl) return false end)
+		hook.Add("OnGroundSit",tag,function(pl) return false end)
 	end
 end)
 
@@ -59,22 +63,20 @@ hook.Add("SetupMove","mretta_clientinit",function(pl,_,cmd)
 	end
 end)
 
--- Base gamemode functionality
-function GM:PlayerInitialSpawn(pl)
+-- Mretta base functionality
+hook.Add("PlayerInitialSpawn","mretta_init",function(pl)
 	pl:SetTeam(TEAM_SPECTATOR)
 
 	if pl:IsBot() then
 		GAMEMODE:PrePlayerReadyForMinigame(pl)
 	end
-end
+end)
+
+function GM:PlayerInitialSpawn(pl) end
 
 function GM:PlayerSpawn(pl)
 	if pl:Team() == TEAM_SPECTATOR then
-		pl:Spectate(OBS_MODE_ROAMING)
-		pl:SetMoveType(MOVETYPE_OBSERVER)
-		pl:SetSolid(SOLID_NONE)
-
-		self:PlayerSetModel(pl)
+		self:PlayerSpawnAsSpectator(pl)
 		return
 	end
 
@@ -82,6 +84,15 @@ function GM:PlayerSpawn(pl)
 
 	pl:SetDuckSpeed(0.1)
 	pl:SetUnDuckSpeed(0.1)
+end
+
+function GM:PlayerSpawnAsSpectator(pl)
+	pl:StripWeapons()
+
+	pl:Spectate(OBS_MODE_ROAMING)
+	pl:SetSolid(SOLID_NONE)
+
+	self:PlayerSetModel(pl)
 end
 
 function GM:PlayerSetModel(pl)

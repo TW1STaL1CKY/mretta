@@ -8,6 +8,12 @@ concommand.Add("mretta_ready",function(pl)
 	hook.Run("PrePlayerReadyForMinigame",pl)
 
 	if not HasGameStarted() and #GetReadyPlayers() >= (_config.MinPlayers or 1) then
+		-- Reset everyone's score and deaths to 0, in case they've accumulated some while waiting for players
+		for k,v in next,player.GetAll() do
+			v:SetFrags(0)
+			v:SetDeaths(0)
+		end
+
 		-- Start the game since we have enough players now
 		AdvanceRound()
 

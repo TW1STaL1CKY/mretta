@@ -15,6 +15,6 @@ function PlayPlayerGesture(pl,slot,seqId,omitPl)
 	if omitPl then
 		net.SendOmit(pl)
 	else
-		net.SendToServer()
+		net.Broadcast()
 	end
 end

@@ -112,7 +112,7 @@ hook.Add("HUDPaint",_hkHud,function()
 	local timeEnabled = _config.RoundTime > 0
 
 	surface.SetFont(mretta.FontLarge)
-	local timeText = IsCompleted() and (GetCompletedReason() or postRoundDefaultText) or (timeEnabled and string.FormattedTime(math.max(_timeEnd-CurTime(),0),roundTimeFormat) or roundTimeNone)
+	local timeText = (gameStarted and IsCompleted()) and (GetCompletedReason() or postRoundDefaultText) or (timeEnabled and string.FormattedTime(math.max(_timeEnd-CurTime(),0),roundTimeFormat) or roundTimeNone)
 	local timeW,timeH = surface.GetTextSize(timeText)
 
 	surface.SetFont(mretta.FontSmall)

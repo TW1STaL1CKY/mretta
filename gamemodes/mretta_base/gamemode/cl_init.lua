@@ -17,6 +17,9 @@ include("voting/rtv/cl_rtv.lua")
 include("voting/thumbs/sh_thumbs.lua")
 include("voting/thumbs/cl_thumbs.lua")
 
+-- Adding this because prop_physics_multiplayer doesn't have a killicon by default
+killicon.AddFont("prop_physics_multiplayer","HL2MPTypeDeath","9",Color(255,80,0))
+
 hook.Add("Initialize","mretta_client",function()
 	-- Disallow PAC functionality
 	if GAMEMODE.DisallowPAC then

@@ -98,3 +98,15 @@ end
 function GM:PlayerSetModel(pl)
 	pl:SetModel(player_manager.TranslatePlayerModel(pl:GetInfo("cl_playermodel")))
 end
+
+function GM:AllowPlayerPickup(pl)
+	return pl:GetMoveType() != MOVETYPE_OBSERVER
+end
+
+function GM:PlayerCanPickupWeapon(pl,wep)
+	return pl:GetMoveType() != MOVETYPE_OBSERVER
+end
+
+function GM:PlayerUse(pl,ent)
+	return pl:GetMoveType() != MOVETYPE_OBSERVER
+end

@@ -34,6 +34,10 @@ function HasGameEnded()
 	return _gameProgress >= GAME_PROGRESS_ENDING
 end
 
+function GetCurrentRound()
+	return _currentRound
+end
+
 function GetRoundsLeft()
 	return (_config.MaxRounds-_currentRound)+1
 end

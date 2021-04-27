@@ -75,6 +75,8 @@ end)
 function GM:PlayerInitialSpawn(pl) end
 
 function GM:PlayerSpawn(pl)
+	pl:StripWeapons()
+
 	if pl:Team() == TEAM_SPECTATOR then
 		self:PlayerSpawnAsSpectator(pl)
 		return
@@ -87,8 +89,6 @@ function GM:PlayerSpawn(pl)
 end
 
 function GM:PlayerSpawnAsSpectator(pl)
-	pl:StripWeapons()
-
 	pl:Spectate(OBS_MODE_ROAMING)
 	pl:SetSolid(SOLID_NONE)
 

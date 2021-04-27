@@ -63,6 +63,10 @@ net.Receive(_nwUpdate,function()
 			mretta_sfx.StopCurrentMusic()
 		end
 
+		if TriggerHelpText then
+			timer.Simple(0,TriggerHelpText)
+		end
+
 		hook.Run("PostRoundChange",roundNum)
 
 		-- Enable/Disable round thinking depending on config
@@ -88,6 +92,16 @@ net.Receive(_nwComplete,function()
 end)
 
 net.Receive(_nwHelpText,function()
+	if TriggerHelpText then
+		TriggerHelpText()
+	end
+end)
+
+function IsInOvertime()
+	return not _roundComplete and GetTimeLeft() < -0.5
+end
+
+function TriggerHelpText()
 	local pl = LocalPlayer()
 	if not (pl and pl:IsValid()) then return end
 
@@ -95,14 +109,10 @@ net.Receive(_nwHelpText,function()
 	if not helpText then return end
 
 	if mretta_alerts then
-		mretta_alerts.Display(helpText)
+		mretta_alerts.Display(helpText,6)
 	else
 		pl:ChatPrint(helpText)
 	end
-end)
-
-function IsInOvertime()
-	return not _roundComplete and GetTimeLeft() < -0.5
 end
 
 hook.Add("HUDPaint",_hkHud,function()

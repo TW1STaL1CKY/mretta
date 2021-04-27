@@ -206,7 +206,7 @@ function CompleteGame(fromRtv)
 
 		local points = 0
 		for k,v in next,player.GetHumans() do
-			points = points + v:Frags()
+			points = points+v:Frags()
 		end
 
 		mretta.TrackMinigameStat("PointsScored",points)
@@ -227,6 +227,10 @@ hook.Add("PlayerChangedTeam","rounds_help",function(pl,oldTeamId,newTeamId)
 	if oldTeamId == newTeamId then return end
 	if not GetHelpText(newTeamId) then return end
 
-	net.Start(_nwHelpText)
-	net.Send(pl)
+	timer.Simple(0.2,function()
+		if not pl:IsValid() then return end
+
+		net.Start(_nwHelpText)
+		net.Send(pl)
+	end)
 end)

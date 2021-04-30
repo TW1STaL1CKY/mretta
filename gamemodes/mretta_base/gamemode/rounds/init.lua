@@ -165,7 +165,7 @@ function AdvanceRound()
 end
 
 function CompleteRound(reason)
-	if _roundComplete then return end
+	if _roundComplete or _gameProgress == GAME_PROGRESS_WAITING then return end
 	if voting and voting.HasVotingStarted() then return end
 
 	_timeCompleteEnd = CurTime()+10

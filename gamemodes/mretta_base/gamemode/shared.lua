@@ -7,9 +7,14 @@ GM.DisallowPAC = false
 GM.DisallowSitAnywhere = false
 
 hook.Add("Initialize","mretta_shared",function()
+	-- Disallow PAC functionality
+	if GAMEMODE.DisallowPAC then
+		hook.Add("PACMutateEntity","mretta_pac",function() return false end)
+	end
+
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
-		hook.Add("CheckValidSit","mretta_sitanywhere",function(pl) return false end)
+		hook.Add("CheckValidSit","mretta_sitanywhere",function() return false end)
 	end
 end)
 

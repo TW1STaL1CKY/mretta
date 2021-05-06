@@ -37,17 +37,17 @@ hook.Add("Initialize","mretta_server",function()
 	if GAMEMODE.DisallowPAC then
 		local tag = "mretta_pac"
 
-		hook.Add("PrePACConfigApply",tag,function(pl) return false end)
-		hook.Add("PACApplyModel",tag,function(pl) return false end)
+		hook.Add("PrePACConfigApply",tag,function() return false end)
+		hook.Add("PACApplyModel",tag,function() return false end)
 	end
 
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
 		local tag = "mretta_sitanywhere"
 
-		hook.Add("HandleSit",tag,function(pl) return false end)
-		hook.Add("ShouldAllowSit",tag,function(pl) return false end)
-		hook.Add("OnGroundSit",tag,function(pl) return false end)
+		hook.Add("HandleSit",tag,function() return false end)
+		hook.Add("ShouldAllowSit",tag,function() return false end)
+		hook.Add("OnGroundSit",tag,function() return false end)
 	end
 end)
 

@@ -23,12 +23,15 @@ killicon.AddFont("prop_physics_multiplayer","HL2MPTypeDeath","9",Color(255,80,0)
 hook.Add("Initialize","mretta_client",function()
 	-- Disallow PAC functionality
 	if GAMEMODE.DisallowPAC then
-		hook.Add("PrePACEditorOpen","mretta_pac",function(pl) return false end)
+		local tag = "mretta_pac"
+
+		hook.Add("PrePACLoadOutfit",tag,function() return false end)
+		hook.Add("PrePACEditorOpen",tag,function() return false end)
 	end
 
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
-		hook.Add("ShouldSit","mretta_sitanywhere",function(pl) return false end)
+		hook.Add("ShouldSit","mretta_sitanywhere",function() return false end)
 	end
 end)
 

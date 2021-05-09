@@ -20,7 +20,7 @@ local function adjustVolume()
 		local sfx = soundVolume:GetFloat()
 		sfx = sfx <= 0 and 1 or sfx
 
-		_current.Audio:SetVolume(musicVolume:GetFloat()/sfx)
+		_current.Audio:SetVolume((musicVolume:GetFloat()/sfx)*_current.VolumeScale)
 	end
 end
 
@@ -43,6 +43,20 @@ local function persistPlaybackThink()
 			_current.Audio:Play()
 		end
 	end
+
+	if _current.FadeOutStart and _current.FadeOutEnd then
+		local duration = _current.FadeOutEnd-_current.FadeOutStart
+
+		local scale = (_current.FadeOutEnd-RealTime())/duration
+		scale = scale <= 0 and 0 or (scale > 1 and 1 or scale)
+
+		if scale > 0 then
+			_current.VolumeScale = scale
+			adjustVolume()
+		else
+			_current.Stopped = true
+		end
+	end
 end
 
 local function playMusic(snd,isCustom,dontLoop)
@@ -56,6 +70,7 @@ local function playMusic(snd,isCustom,dontLoop)
 
 	_current = {
 		Audio = snd,
+		VolumeScale = 1,
 		Custom = isCustom or false,
 		Stopped = false
 	}
@@ -154,6 +169,15 @@ function StopCurrentMusic()
 	_current.Audio = nil
 
 	hook.Remove("Think",_hkThink)
+end
+
+function FadeOutCurrentMusic(duration)
+	if not (_current and _current.Audio) then return end
+
+	local now = RealTime()
+
+	_current.FadeOutStart = now
+	_current.FadeOutEnd = now+(duration or 5)
 end
 
 -- Sound functions: Play sound files everywhere or in 3D without persistence.

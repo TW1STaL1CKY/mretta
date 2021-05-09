@@ -68,7 +68,7 @@ hook.Add("PlayerInitialSpawn","mretta_init",function(pl)
 	pl:SetTeam(TEAM_SPECTATOR)
 
 	if pl:IsBot() then
-		GAMEMODE:PrePlayerReadyForMinigame(pl)
+		concommand.Run(pl,"mretta_ready")
 	end
 end)
 

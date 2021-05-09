@@ -189,8 +189,7 @@ local function getTopVotes(options)
 end
 
 local function executeCommand()
-	print("executeCommand",ChosenMinigame,ChosenMap)
-	--game.ConsoleCommand(string.format("gamemode %s;changelevel %s\n",ChosenMinigame,ChosenMap))
+	game.ConsoleCommand(string.format("gamemode %s;changelevel %s\n",ChosenMinigame,ChosenMap))
 end
 
 net.Receive(_nwVote,function(_,pl)

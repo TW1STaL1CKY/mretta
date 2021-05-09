@@ -82,6 +82,18 @@ function GetReadyPlayers()
 	return pls
 end
 
+function GetAlivePlayers()
+	local pls = {}
+
+	for k,v in next,player.GetAll() do
+		if IsPlayerReady(v) and v:Health() > 0 and v:GetMoveType() != MOVETYPE_OBERSVER then
+			pls[#pls+1] = v
+		end
+	end
+
+	return pls
+end
+
 local PLAYER = FindMetaTable("Player")
 
 function PLAYER:IsReady()

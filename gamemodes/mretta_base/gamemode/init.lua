@@ -64,6 +64,15 @@ hook.Add("SetupMove","mretta_clientinit",function(pl,_,cmd)
 end)
 
 -- Mretta base functionality
+hook.Add("PlayerDisconnected","mretta_emptywatch",function(pl)
+	timer.Simple(1,function()
+		if #player.GetAll() == 0 then
+			-- Server now empty, restart the map so everything starts anew when players return
+			game.ConsoleCommand(string.format("changelevel %s\n",game.GetMap()))
+		end
+	end)
+end)
+
 hook.Add("PlayerInitialSpawn","mretta_init",function(pl)
 	pl:SetTeam(TEAM_SPECTATOR)
 

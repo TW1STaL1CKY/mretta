@@ -224,7 +224,7 @@ hook.Add("MrettaPlayerLoaded","rounds_init",function(pl)
 end)
 
 hook.Add("PlayerChangedTeam","rounds_help",function(pl,oldTeamId,newTeamId)
-	if oldTeamId == newTeamId then return end
+	if oldTeamId == newTeamId or not HasGameStarted() then return end
 	if not GetHelpText(newTeamId) then return end
 
 	timer.Simple(0.2,function()

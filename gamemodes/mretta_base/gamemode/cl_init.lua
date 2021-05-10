@@ -33,8 +33,18 @@ hook.Add("Initialize","mretta_client",function()
 	if GAMEMODE.DisallowSitAnywhere then
 		hook.Add("ShouldSit","mretta_sitanywhere",function() return false end)
 	end
-end)
 
-hook.Add("PrePlayerDraw","mretta_spectators",function(pl,mode)
-	-- Being able to see other spectators goes here
+	-- Disallow Customisable Third-person functionality
+	if GAMEMODE.DisallowCTP then
+		local empty = function() end
+
+		ctp.Enable = empty
+		ctp.Disable = empty
+		ctp.Toggle = empty
+		ctp.ToggleMenu = empty
+
+		ctp.CalcView = empty
+		ctp.PreCalcView = empty
+		ctp.CreateMove = empty
+	end
 end)

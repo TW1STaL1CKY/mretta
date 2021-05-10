@@ -41,6 +41,11 @@ hook.Add("Initialize","mretta_server",function()
 		hook.Add("PACApplyModel",tag,function() return false end)
 	end
 
+	-- Disallow Outfitter functionality
+	if GAMEMODE.DisallowOutfitter then
+		hook.Add("OutfitterCyclePlayerModel","mretta_outfitter",function() return false end)
+	end
+
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
 		local tag = "mretta_sitanywhere"

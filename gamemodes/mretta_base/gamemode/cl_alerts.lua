@@ -26,7 +26,7 @@ function Display(text,seconds,silent)
 
 	_current = _current or {}
 
-	_current.Text = text:gsub("<[^=>]+=[^>]*>","")
+	_current.Text = text:gsub("</?[^=>]+=[^>]*>",""):gsub("</[^>]+>","")
 	_current.Markup = markup.Parse(string.format("<color=%s><font=%s>%s",table.concat(mretta.HudForeground:ToTable(),","),mretta.FontLarge or "Default",text),ScrW()*0.75)
 	_current.TimeStart = RealTime()
 	_current.TimeEnd = _current.TimeStart+(seconds or DefaultTime or 5)
@@ -46,6 +46,3 @@ function Clear()
 	_current.TimeStart = nil
 	_current.TimeEnd = nil
 end
-
---hooks
---[/]	HUDDrawAlert

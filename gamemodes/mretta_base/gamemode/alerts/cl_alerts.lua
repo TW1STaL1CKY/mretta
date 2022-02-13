@@ -46,3 +46,11 @@ function Clear()
 	_current.TimeStart = nil
 	_current.TimeEnd = nil
 end
+
+net.Receive("mretta_alerts",function()
+	local text = net.ReadString()
+	local seconds = net.ReadUInt(6)
+	local silent = net.ReadBool()
+
+	Display(text,seconds,silent)
+end)

@@ -109,7 +109,7 @@ function TriggerHelpText()
 	if not helpText then return end
 
 	if mretta_alerts then
-		mretta_alerts.Display(helpText,6)
+		mretta_alerts.Display(helpText,8)
 	else
 		pl:ChatPrint(helpText)
 	end

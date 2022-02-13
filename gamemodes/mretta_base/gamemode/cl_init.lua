@@ -1,7 +1,7 @@
 include("shared.lua")
 include("sh_util.lua")
-include("cl_alerts.lua")
 include("cl_basehud.lua")
+include("alerts/cl_alerts.lua")
 include("gestures/cl_gestures.lua")
 include("scoreboard/cl_scoreboard.lua")
 include("scoreboard/cl_scoreboard_derma.lua")

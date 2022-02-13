@@ -94,6 +94,26 @@ function GetAlivePlayers()
 	return pls
 end
 
+function GetTopScoringPlayers(teamId)
+	local pls = {}
+	local topScore = -9999
+
+	for k,v in next,player.GetAll() do
+		if IsPlayerReady(v) and (teamId == nil or v:Team() == teamId) then
+			local score = v:Frags()
+
+			if score == topScore then
+				pls[#pls+1] = v
+			elseif score > topScore then
+				topScore = score
+				pls = {v}
+			end
+		end
+	end
+
+	return pls
+end
+
 local PLAYER = FindMetaTable("Player")
 
 function PLAYER:IsReady()

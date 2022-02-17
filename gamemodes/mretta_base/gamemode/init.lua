@@ -54,6 +54,10 @@ hook.Add("Initialize","mretta_server",function()
 		hook.Add("HandleSit",tag,function() return false end)
 		hook.Add("ShouldAllowSit",tag,function() return false end)
 		hook.Add("OnGroundSit",tag,function() return false end)
+	else
+		function GAMEMODE:ShouldAllowSit(pl)
+			return pl:GetMoveType() != MOVETYPE_OBSERVER
+		end
 	end
 end)
 
@@ -123,5 +127,13 @@ function GM:PlayerCanPickupWeapon(pl,wep)
 end
 
 function GM:PlayerUse(pl,ent)
+	return pl:GetMoveType() != MOVETYPE_OBSERVER
+end
+
+function GM:CanPlayerSuicide(pl)
+	return pl:GetMoveType() != MOVETYPE_OBSERVER
+end
+
+function GM:CanPlayerEnterVehicle(pl)
 	return pl:GetMoveType() != MOVETYPE_OBSERVER
 end

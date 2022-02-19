@@ -111,7 +111,7 @@ end)
 hook.Add("HUDPaint","mretta_clienthud",function()
 	local pl = LocalPlayer()
 
-	if pl:Team() == TEAM_SPECTATOR or pl:GetMoveType() == MOVETYPE_OBSERVER then return end
+	if pl:Team() == TEAM_SPECTATOR or pl:IsSpectating() then return end
 	if hook.Run("HUDDrawVitalsAmmo") then return end
 
 	local maxHP = pl:GetMaxHealth()

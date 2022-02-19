@@ -79,7 +79,7 @@ function PANEL:Paint(w,h)
 
 	if self.Player then
 		if self.Player:IsValid() then
-			if self.Player:Health() <= 0 or self.Player:GetMoveType() == MOVETYPE_OBSERVER then
+			if self.Player:Health() <= 0 or self.Player:IsSpectating() then
 				surface.SetAlphaMultiplier(0.25)
 			end
 

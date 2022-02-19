@@ -86,7 +86,7 @@ function GetAlivePlayers()
 	local pls = {}
 
 	for k,v in next,player.GetAll() do
-		if IsPlayerReady(v) and v:Health() > 0 and v:GetMoveType() != MOVETYPE_OBERSVER then
+		if IsPlayerReady(v) and v:Health() > 0 and not v:IsSpectating() then
 			pls[#pls+1] = v
 		end
 	end
@@ -118,4 +118,8 @@ local PLAYER = FindMetaTable("Player")
 
 function PLAYER:IsReady()
 	return IsPlayerReady(self)
+end
+
+function PLAYER:IsSpectating()
+	return self:GetObserverMode() != OBS_MODE_NONE
 end

@@ -56,7 +56,7 @@ hook.Add("Initialize","mretta_server",function()
 		hook.Add("OnGroundSit",tag,function() return false end)
 	else
 		function GAMEMODE:ShouldAllowSit(pl)
-			return pl:GetMoveType() != MOVETYPE_OBSERVER
+			return not pl:IsSpectating()
 		end
 	end
 end)
@@ -119,21 +119,21 @@ function GM:PlayerSetModel(pl)
 end
 
 function GM:AllowPlayerPickup(pl)
-	return pl:GetMoveType() != MOVETYPE_OBSERVER
+	return not pl:IsSpectating()
 end
 
 function GM:PlayerCanPickupWeapon(pl,wep)
-	return pl:GetMoveType() != MOVETYPE_OBSERVER
+	return not pl:IsSpectating()
 end
 
 function GM:PlayerUse(pl,ent)
-	return pl:GetMoveType() != MOVETYPE_OBSERVER
+	return not pl:IsSpectating()
 end
 
 function GM:CanPlayerSuicide(pl)
-	return pl:GetMoveType() != MOVETYPE_OBSERVER
+	return not pl:IsSpectating()
 end
 
 function GM:CanPlayerEnterVehicle(pl)
-	return pl:GetMoveType() != MOVETYPE_OBSERVER
+	return not pl:IsSpectating()
 end

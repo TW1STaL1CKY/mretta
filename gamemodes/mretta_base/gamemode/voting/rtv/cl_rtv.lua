@@ -25,14 +25,14 @@ local function rtvHud()
 		local votesRequired = RtvRequiredVotes()
 
 		surface.SetFont(mretta.FontSmall)
-		surface.SetTextColor(mretta.HudForeground)
+		surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 		surface.SetTextPos(0,0)
 		surface.DrawText(string.format(votesFormat,votes,votesRequired))
 
-		surface.SetDrawColor(mretta.HudBackground)
+		surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
 		surface.DrawRect(0,txtHeight,txtWidth,barHeight)
 
-		surface.SetDrawColor(mretta.HudForeground)
+		surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 		surface.DrawRect(0,txtHeight,(votes/votesRequired)*txtWidth,barHeight)
 	end)
 end

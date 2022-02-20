@@ -59,11 +59,11 @@ function GetReadableColor(backgroundCol)
 end
 
 function DrawHudPanel(x,y,w,h,lineEnum,drawFunc)
-	surface.SetDrawColor(HudBackground)
+	surface.SetDrawColor(HudBackground.r,HudBackground.g,HudBackground.b,HudBackground.a)
 	surface.DrawRect(x,y,w,h)
 
 	if lineEnum > _G.MRETTAHUD_LINE_NONE then
-		surface.SetDrawColor(HudForeground)
+		surface.SetDrawColor(HudForeground.r,HudForeground.g,HudForeground.b,HudForeground.a)
 		surface.DrawRect(lineEnum == _G.MRETTAHUD_LINE_RIGHT and x+w or x-5,y-HudPaddingY,5,h+(HudPaddingY*2))
 	end
 
@@ -92,7 +92,7 @@ function DrawHudScrollInPanel(x,y,w,h,timeStart,timeEnd,drawFunc)
 	surface.SetDrawColor(HudForeground.r,HudForeground.g,HudForeground.b,(math.min(timeLeft < HudSlideLineFadeDur and timeLeft or timeElapsed,HudSlideLineFadeDur)/HudSlideLineFadeDur)*HudForeground.a)
 	surface.DrawRect(x-5,y-HudPaddingY,5,h+(HudPaddingY*2))
 
-	surface.SetDrawColor(HudBackground)
+	surface.SetDrawColor(HudBackground.r,HudBackground.g,HudBackground.b,HudBackground.a)
 	surface.DrawRect(x,y,pos,h)
 
 	render.SetScissorRect(x+HudPaddingX,0,x+pos-HudPaddingX,sH,true)
@@ -131,7 +131,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 
 	DrawHudPanel(HudMarginX,sH-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_LEFT,function()
 		surface.SetFont(FontLarge)
-		surface.SetTextColor(col)
+		surface.SetTextColor(col.r,col.g,col.b,col.a)
 		surface.SetTextPos(0,0)
 		surface.DrawText(currentHP)
 
@@ -143,16 +143,16 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 
 		local barW = w-(HudPaddingX*2)
 		local barY = h-(HudPaddingY*3)-barHeight
-		surface.SetDrawColor(colShadow)
+		surface.SetDrawColor(colShadow.r,colShadow.g,colShadow.b,colShadow.a)
 		surface.DrawRect(0,barY,barW,barHeight)
 
 		local currentBarFrac = currentHP/maxHP
 		barLerpWidth = Lerp(FrameTime()*1.5,barLerpWidth+(barLerpWidth < currentBarFrac and 0.0001 or -0.0001),currentBarFrac)
 
-		surface.SetDrawColor(colHurt)
+		surface.SetDrawColor(colHurt.r,colHurt.g,colHurt.b,colHurt.a)
 		surface.DrawRect(0,barY,barLerpWidth*barW,barHeight)
 
-		surface.SetDrawColor(col)
+		surface.SetDrawColor(col.r,col.g,col.b,col.a)
 		surface.DrawRect(0,barY,currentBarFrac*barW,barHeight)
 
 		local maxAP = pl:GetMaxArmor()
@@ -161,10 +161,10 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 		if currentAP > 0 then
 			barY = barY+barHeight
 
-			surface.SetDrawColor(HudBackground)
+			surface.SetDrawColor(HudBackground.r,HudBackground.g,HudBackground.b,HudBackground.a)
 			surface.DrawRect(0,barY,barW,3)
 
-			surface.SetDrawColor(colArmor)
+			surface.SetDrawColor(colArmor.r,colArmor.g,colArmor.b,colArmor.a)
 			surface.DrawRect(0,barY,(currentAP/maxAP)*barW,3)
 		end
 	end)
@@ -199,7 +199,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 	DrawHudPanel(sW-HudMarginX-w,sH-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 		col = warning and alphaBlink(HudForeground,100) or HudForeground
 
-		surface.SetTextColor(col)
+		surface.SetTextColor(col.r,col.g,col.b,col.a)
 
 		local xPos = w-(HudPaddingX*2)
 
@@ -233,7 +233,7 @@ hook.Add("HUDPaint","mretta_clienthud",function()
 
 		DrawHudPanel(sW-HudMarginX-w,sH-primaryH-HudPaddingY-HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 			surface.SetFont(FontLarge)
-			surface.SetTextColor(col)
+			surface.SetTextColor(col.r,col.g,col.b,col.a)
 			surface.SetTextPos(w-(HudPaddingX*2)-altW,0)
 			surface.DrawText(ammo2)
 		end)

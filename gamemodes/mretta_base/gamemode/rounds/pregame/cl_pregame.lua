@@ -16,7 +16,7 @@ hook.Add("HUDPaint",hkHud,function()
 
 	mretta.DrawHudPanel(ScrW()-mretta.HudMarginX-w,ScrH()-mretta.HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
 		surface.SetFont(mretta.FontLarge)
-		surface.SetTextColor(mretta.HudForeground)
+		surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 		surface.SetTextPos(0,0)
 		surface.DrawText(pressToReadyText)
 	end)

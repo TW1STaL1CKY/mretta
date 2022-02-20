@@ -134,11 +134,11 @@ hook.Add("HUDPaint",_hkHud,function()
 	mretta.DrawHudPanel(mretta.HudMarginX,mretta.HudMarginY,w,h,_G.MRETTAHUD_LINE_LEFT,function()
 		if gameStarted then
 			surface.SetFont(mretta.FontLarge)
-			surface.SetTextColor(ColorAlpha(mretta.HudForeground,timeEnabled and IsInOvertime() and 155+(math.sin(RealTime()*15)*100) or 255))
+			surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,timeEnabled and IsInOvertime() and 155+(math.sin(RealTime()*15)*100) or 255)
 			surface.SetTextPos(0,0)
 			surface.DrawText(timeText)
 		else
-			surface.SetDrawColor(mretta.HudForeground)
+			surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 
 			local t = RealTime()*2.5
 			local dotS,dotSH = 4,2
@@ -149,7 +149,7 @@ hook.Add("HUDPaint",_hkHud,function()
 		end
 
 		surface.SetFont(mretta.FontSmall)
-		surface.SetTextColor(mretta.HudForeground)
+		surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 		surface.SetTextPos(0,timeH)
 		surface.DrawText(roundText)
 	end)

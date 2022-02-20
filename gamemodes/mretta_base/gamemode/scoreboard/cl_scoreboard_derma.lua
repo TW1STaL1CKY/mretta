@@ -74,7 +74,7 @@ function PANEL:OnRemove()
 end
 
 function PANEL:Paint(w,h)
-	surface.SetDrawColor(mretta.HudBackground)
+	surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
 	surface.DrawRect(0,0,w,h)
 
 	if self.Player then
@@ -92,7 +92,7 @@ function PANEL:Paint(w,h)
 			local txtW,txtH = surface.GetTextSize(txt)
 			local txtY = (h*0.5)-(txtH*0.5)
 
-			surface.SetTextColor(mretta.HudForeground)
+			surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 			surface.SetTextPos((self.PaddingX*2)+self.AvatarSize,txtY)
 			surface.DrawText(txt)
 
@@ -116,7 +116,7 @@ function PANEL:Paint(w,h)
 			surface.SetAlphaMultiplier(1)
 
 			if self.Player == LocalPlayer() then
-				surface.SetDrawColor(mretta.HudForeground)
+				surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 				surface.DrawRect(0,0,5,h)
 			end
 		else
@@ -204,11 +204,12 @@ function PANEL:Paint(w,h)
 		local countW,txtH = surface.GetTextSize(teamCount)
 
 		local teamCol = team.GetColor(self.TeamId)
+		local readableCol = mretta.GetReadableColor(teamCol)
 
 		surface.SetDrawColor(teamCol.r,teamCol.g,teamCol.b,mretta.HudBackground.a)
 		surface.DrawRect(0,0,w,txtH+(self.PaddingY*2))
 
-		surface.SetTextColor(mretta.GetReadableColor(teamCol))
+		surface.SetTextColor(readableCol.r,readableCol.g,readableCol.b,readableCol.a)
 		surface.SetTextPos(self.PaddingX,self.PaddingY)
 		surface.DrawText(team.GetName(self.TeamId))
 
@@ -353,11 +354,11 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w,h)
-	surface.SetDrawColor(mretta.HudBackground)
+	surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
 	surface.DrawRect(0,0,w,self.InfoPanelHeight)
 
 	surface.SetFont(mretta.FontLarge)
-	surface.SetTextColor(mretta.HudForeground)
+	surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 	surface.SetTextPos(self.PaddingX,self.PaddingY)
 	surface.DrawText(GAMEMODE.Name)
 

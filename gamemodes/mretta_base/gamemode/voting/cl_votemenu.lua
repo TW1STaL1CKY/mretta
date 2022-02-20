@@ -51,14 +51,14 @@ function PANEL:Paint(w,h)
 	local option = options[self.OptionId]
 	if not option then return end
 
-	surface.SetDrawColor(mretta.HudBackground)
+	surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
 	surface.DrawRect(0,0,w,h)
 
-	surface.SetDrawColor(color_black)
+	surface.SetDrawColor(0,0,0)
 	surface.DrawRect(0,0,w,self.ThumbnailHeight)
 
 	if self.ThumbnailMaterial then
-		surface.SetDrawColor(color_white)
+		surface.SetDrawColor(255,255,255)
 		surface.SetMaterial(self.ThumbnailMaterial)
 
 		if self.ThumbnailIsForMap then
@@ -68,39 +68,36 @@ function PANEL:Paint(w,h)
 		end
 	end
 
-	-- base gamemode could download minigame thumbnails (use 300x150, end over using net.WriteData?)
-
 	surface.SetFont(mretta.FontSmall)
-	surface.SetTextColor(mretta.HudForeground)
+	surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 
 	local txtW,txtH = surface.GetTextSize(option.Name)
 	local txtHCenterForTwoLines = self.ThumbnailHeight+((h-self.ThumbnailHeight)*0.5)-txtH
 
-	surface.SetTextPos(self.PaddingX,txtHCenterForTwoLines) --h-(txtH*2)-self.PaddingY
+	surface.SetTextPos(self.PaddingX,txtHCenterForTwoLines)
 	surface.DrawText(option.Name)
 
 	local votes = table.Count(option.Votes)
 
-	surface.SetTextPos(self.PaddingX,txtHCenterForTwoLines+txtH) --h-txtH-self.PaddingY
+	surface.SetTextPos(self.PaddingX,txtHCenterForTwoLines+txtH)
 	surface.DrawText(string.format(self.VoteAmountFormat,votes,votes != 1 and "s" or ""))
-	-- maybe put a star or something next to the winning option(s)
 
 	local canVote = _current.TimeEnd+voteBufferTime >= CurTime()
 	local isWinner = self:GetParent().OptionWinner == self.OptionId
 
 	if option.VotedFor or isWinner then
-		surface.SetDrawColor(ColorAlpha(mretta.HudForeground,6+(math.max(self.SelectedAlphaFadeTime-RealTime(),0)/self.VotedAlphaFadeDuration*24)))
+		surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,6+(math.max(self.SelectedAlphaFadeTime-RealTime(),0)/self.VotedAlphaFadeDuration*24))
 		surface.DrawRect(0,0,w,h)
 
-		surface.SetDrawColor(mretta.HudForeground)
+		surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 		surface.DrawRect(0,h-5,w,5)
 	elseif self:IsHovered() and canVote then
-		surface.SetDrawColor(fadedWhite)
+		surface.SetDrawColor(fadedWhite.r,fadedWhite.g,fadedWhite.b,fadedWhite.a)
 		surface.DrawRect(0,0,w,h)
 	end
 
 	if not canVote and not isWinner then
-		surface.SetDrawColor(Color(0,0,0,220))
+		surface.SetDrawColor(0,0,0,220)
 		surface.DrawRect(0,0,w,h)
 	end
 
@@ -178,7 +175,7 @@ end
 
 function PANEL:Paint(w,h)
 	surface.SetMaterial(blurTexture)
-	surface.SetDrawColor(color_white)
+	surface.SetDrawColor(255,255,255)
 
 	for i=0.25,1,0.25 do
 		blurTexture:SetFloat("$blur",4*i)
@@ -188,7 +185,7 @@ function PANEL:Paint(w,h)
 		surface.DrawTexturedRect(0,0,w,h)
 	end
 
-	surface.SetDrawColor(fadedBlack)
+	surface.SetDrawColor(fadedBlack.r,fadedBlack.g,fadedBlack.b,fadedBlack.a)
 	surface.DrawRect(0,0,w,h)
 
 	if not (_votingStage and _current and _current.TimeEnd) then return end
@@ -242,7 +239,7 @@ function PANEL:Paint(w,h)
 	end
 
 	surface.SetFont(mretta.FontLarge)
-	surface.SetTextColor(mretta.HudForeground)
+	surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
 
 	local wHalf = w*0.5
 	local txtW,txtH = surface.GetTextSize(title)

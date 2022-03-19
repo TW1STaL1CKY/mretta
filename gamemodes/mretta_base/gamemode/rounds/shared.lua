@@ -73,7 +73,7 @@ end
 function GetReadyPlayers()
 	local pls = {}
 
-	for k,v in next,player.GetAll() do
+	for k,v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) then
 			pls[#pls+1] = v
 		end
@@ -85,7 +85,7 @@ end
 function GetAlivePlayers()
 	local pls = {}
 
-	for k,v in next,player.GetAll() do
+	for k,v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) and v:Health() > 0 and not v:IsSpectating() then
 			pls[#pls+1] = v
 		end
@@ -98,7 +98,7 @@ function GetTopScoringPlayers(teamId)
 	local pls = {}
 	local topScore = -9999
 
-	for k,v in next,player.GetAll() do
+	for k,v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) and (teamId == nil or v:Team() == teamId) then
 			local score = v:Frags()
 

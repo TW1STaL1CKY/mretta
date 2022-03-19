@@ -15,7 +15,7 @@ function RequestMinigameThumbnails()
 	local existingThumbsTimes = ""
 	local existingThumbs = file.Find(thumbsFolder.."*.jpg","DATA")
 
-	for k,v in next,existingThumbs do
+	for k,v in ipairs(existingThumbs) do
 		local split = k != #existingThumbs and "|" or ""
 		existingThumbsNames = existingThumbsNames..string.StripExtension(v)..split
 		existingThumbsTimes = existingThumbsTimes..file.Time(thumbsFolder..v,"DATA")..split
@@ -42,7 +42,7 @@ concommand.Add("mretta_thumbs_cleardata",function()
 	local path = GetMinigameThumbnailsPath()
 
 	local thumbFiles = file.Find(path.."*.jpg","DATA")
-	for k,v in next,thumbFiles do
+	for k,v in ipairs(thumbFiles) do
 		file.Delete(path..v)
 	end
 end,nil,"Clears downloaded minigame thumbnails from the data folder.")

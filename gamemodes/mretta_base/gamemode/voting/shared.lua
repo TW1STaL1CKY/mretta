@@ -24,7 +24,7 @@ end
 gameevent.Listen("player_disconnect")
 hook.Add("player_disconnect","voting_disconnect",function(data)
 	if RtvVotes then
-		for k,v in next,RtvVotes do
+		for k in next,RtvVotes do
 			if not (k and k:IsValid()) then
 				RtvVotes[k] = nil
 			end

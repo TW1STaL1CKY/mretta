@@ -64,7 +64,7 @@ function PANEL:OnRemove()
 	local parent = self:GetParent()
 
 	if IsValid(parent) and parent.PlayerRows then
-		for k,v in next,parent.PlayerRows do
+		for k,v in ipairs(parent.PlayerRows) do
 			if v == self then
 				table.remove(parent.PlayerRows,k)
 				break
@@ -171,7 +171,7 @@ function PANEL:PerformLayout()
 		totalHeight = teamH+(self.PaddingY*2.5)
 	end
 
-	for k,v in next,self.PlayerRows do
+	for k,v in ipairs(self.PlayerRows) do
 		v:SetWide(self:GetWide())
 		v:SetPos(0,totalHeight)
 
@@ -187,7 +187,7 @@ function PANEL:OnRemove()
 	local parent = self:GetParent()
 
 	if IsValid(parent) and parent.TeamPanels then
-		for k,v in next,parent.TeamPanels do
+		for k,v in ipairs(parent.TeamPanels) do
 			if v == self then
 				table.remove(parent.TeamPanels,k)
 				break
@@ -270,13 +270,13 @@ end
 function PANEL:RefreshPlayers()
 	self.RefreshNext = RealTime()+self.RefreshInterval
 
-	for k,teamPanel in next,self.TeamPanels do
+	for k,teamPanel in ipairs(self.TeamPanels) do
 		if not teamPanel.PlayerRows then continue end
 
 		local changesMade = false
 		local pls = {}
 
-		for i,row in next,teamPanel.PlayerRows do
+		for i,row in ipairs(teamPanel.PlayerRows) do
 			if row.Player and row.Player:IsValid() and row.Player:Team() == teamPanel.TeamId then
 				pls[row.Player] = true
 			else
@@ -292,7 +292,7 @@ function PANEL:RefreshPlayers()
 			cleanseTable(teamPanel.PlayerRows)
 		end
 
-		for i,pl in next,team.GetPlayers(teamPanel.TeamId) do
+		for i,pl in ipairs(team.GetPlayers(teamPanel.TeamId)) do
 			local frags = pl:Frags()
 			if frags != (pl._sc_lastFrags or 0) then
 				pl._sc_lastFrags = frags
@@ -314,7 +314,7 @@ function PANEL:RefreshPlayers()
 	end
 
 	self.Spectators = {}
-	for k,v in next,team.GetPlayers(TEAM_SPECTATOR) do
+	for k,v in ipairs(team.GetPlayers(TEAM_SPECTATOR)) do
 		self.Spectators[#self.Spectators+1] = v:Name()
 	end
 end
@@ -327,7 +327,7 @@ function PANEL:PerformLayout()
 	local baseHeight = self.InfoPanelHeight+self.PaddingY
 	local maxHeight = 0
 
-	for k,v in next,self.TeamPanels do
+	for k,v in ipairs(self.TeamPanels) do
 		v:SetWide((k % 2 == 1 and k == #self.TeamPanels) and self:GetWide() or halfW-halfPadX)
 		v:SetPos(k % 2 == 1 and 0 or halfW+halfPadX,baseHeight)
 

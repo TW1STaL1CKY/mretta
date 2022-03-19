@@ -227,11 +227,11 @@ concommand.Add("mretta_sfx_cleardata",function()
 
 	local _,minigameFolders = file.Find(mretta.GetRootDataPath().."*","DATA")
 
-	for k,v in next,minigameFolders do
+	for k,v in ipairs(minigameFolders) do
 		local path = string.format("%s%s/sound/",mretta.GetRootDataPath(),v)
 		local soundFiles = file.Find(path.."*","DATA")
 
-		for i,x in next,soundFiles do
+		for i,x in ipairs(soundFiles) do
 			file.Delete(path..x)
 		end
 	end

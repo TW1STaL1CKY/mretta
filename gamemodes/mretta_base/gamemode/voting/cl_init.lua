@@ -6,7 +6,7 @@ local function createVoteMenu()
 	end
 
 	if IsValid(_menu) then
-		for k,v in next,_menu.OptionControls do
+		for k,v in ipairs(_menu.OptionControls) do
 			v:Remove()
 		end
 
@@ -23,7 +23,7 @@ local function createVoteMenu()
 
 	local options = _current[_optionListNames[_votingStage]]
 
-	for k,v in next,options do
+	for k,v in ipairs(options) do
 		local option = vgui.Create("MrettaVoteOption",_menu)
 		local path
 
@@ -59,7 +59,7 @@ net.Receive(_nwUpdate,function()
 	_current.TimeEnd = timeEnd
 	_current[optionListName] = {}
 
-	for k,v in next,options do
+	for k,v in ipairs(options) do
 		local vals = string.Split(v,"|")
 		_current[optionListName][k] = {
 			Name = vals[1],
@@ -81,7 +81,7 @@ net.Receive(_nwVote,function()
 	local options = _current[_optionListNames[stage]]
 	if not (options and options[optionId]) then return end
 
-	for k,v in next,options do
+	for k in ipairs(options) do
 		options[k].Votes[pl] = nil
 	end
 
@@ -96,7 +96,7 @@ function Vote(stage,optionId)
 	if not (options and options[optionId]) then return end
 	if options[optionId].VotedFor or _current.TimeEnd < CurTime() then return false end
 
-	for k,v in next,options do
+	for k in ipairs(options) do
 		options[k].VotedFor = nil
 	end
 

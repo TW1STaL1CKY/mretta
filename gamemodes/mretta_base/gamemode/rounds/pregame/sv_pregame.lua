@@ -23,7 +23,7 @@ concommand.Add("mretta_ready",function(pl)
 			end
 
 			-- Reset everyone's score and deaths to 0, in case they've accumulated some while waiting for players
-			for k,v in next,player.GetAll() do
+			for k,v in ipairs(player.GetAll()) do
 				v:SetFrags(0)
 				v:SetDeaths(0)
 			end

@@ -5,7 +5,7 @@ util.AddNetworkString(_nwVote)
 
 local function getMinigameMaps(minigame)
 	local minigameData
-	for k,v in next,_minigameData do
+	for k,v in ipairs(_minigameData) do
 		if v.name == minigame then
 			minigameData = v
 			break
@@ -20,10 +20,10 @@ local function getMinigameMaps(minigame)
 	if not allMaps then return maps end
 
 	local searchStrings = string.Split(minigameData.maps,"|")
-	for k,v in next,allMaps do
+	for k,v in ipairs(allMaps) do
 		v = v:gsub("%.[Bb][Ss][Pp]$","")
 
-		for i,x in next,searchStrings do
+		for i,x in ipairs(searchStrings) do
 			if v:match(x) then
 				maps[#maps+1] = v
 				break
@@ -49,7 +49,7 @@ local function startMinigameVote(voteTime)
 	local currentMinigame = engine.ActiveGamemode()
 	local currentMinigameKey,currentMinigameData
 
-	for k,v in next,engine.GetGamemodes() do
+	for k,v in ipairs(engine.GetGamemodes()) do
 		if v.name != "mretta_base" and v.name:match("^mretta_") then
 			if not v.maps or v.maps == "" then
 				mretta.Print("Minigame ",v.name," has no map filter set in its txt file, skipping...")
@@ -111,7 +111,7 @@ local function startMinigameVote(voteTime)
 	mretta.Print("Started minigame vote")
 
 	if mretta.TrackMinigameStat then
-		for k,v in next,_current.Minigames do
+		for k,v in ipairs(_current.Minigames) do
 			mretta.TrackMinigameStat("VotesAppearedIn",1,v.LogicalName)
 		end
 	end
@@ -162,7 +162,7 @@ local function startMapVote(minigame,voteTime)
 	mretta.Print("Started map vote")
 
 	if mretta.TrackMapStat then
-		for k,v in next,_current.Maps do
+		for k,v in ipairs(_current.Maps) do
 			mretta.TrackMapStat("VotesAppearedIn",1,v.Name)
 		end
 	end
@@ -173,7 +173,7 @@ end
 local function getTopVotes(options)
 	local topOptions,topVotes = {},0
 
-	for k,v in next,options do
+	for k,v in ipairs(options) do
 		local votes = table.Count(v.Votes)
 		if votes == 0 then continue end
 
@@ -206,7 +206,7 @@ net.Receive(_nwVote,function(_,pl)
 	if not (options and options[optionId]) then return end
 	if options[optionId].Votes[pl] then return end
 
-	for k,v in next,options do
+	for k in ipairs(options) do
 		options[k].Votes[pl] = nil
 	end
 
@@ -247,7 +247,7 @@ function Start()
 		mretta.Print("Players voted for minigame ",ChosenMinigame)
 
 		if mretta.TrackMinigameStat then
-			for k,v in next,_current.Minigames do
+			for k,v in ipairs(_current.Minigames) do
 				if v.Votes and next(v.Votes) then
 					mretta.TrackMinigameStat("VotesFor",table.Count(v.Votes),v.LogicalName)
 				end
@@ -263,7 +263,7 @@ function Start()
 				ChosenMap = noVotes and _current.Maps[math.random(1,#_current.Maps)].Name or topMaps[math.random(1,#topMaps)]
 
 				if mretta.TrackMapStat then
-					for k,v in next,_current.Maps do
+					for k,v in ipairs(_current.Maps) do
 						if v.Votes and next(v.Votes) then
 							mretta.TrackMapStat("VotesFor",table.Count(v.Votes),v.Name)
 						end

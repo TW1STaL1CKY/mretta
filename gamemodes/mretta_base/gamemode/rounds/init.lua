@@ -149,7 +149,7 @@ function AdvanceRound()
 	if not dontRespawn then
 		game.CleanUpMap()
 
-		for k,v in next,GetReadyPlayers() do
+		for k,v in ipairs(GetReadyPlayers()) do
 			v:Spawn()
 		end
 	end
@@ -205,7 +205,7 @@ function CompleteGame(fromRtv)
 		end
 
 		local points = 0
-		for k,v in next,player.GetHumans() do
+		for k,v in ipairs(player.GetHumans()) do
 			points = points+v:Frags()
 		end
 

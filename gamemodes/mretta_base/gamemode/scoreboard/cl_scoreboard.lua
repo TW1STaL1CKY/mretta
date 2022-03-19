@@ -10,7 +10,7 @@ function OpenScoreboard()
 		scoreboard:SetPos((ScrW()*0.5)-(scoreboard:GetWide()*0.5),0)
 
 		if istable(GAMEMODE.ScoreboardTeams) then
-			for k,v in next,GAMEMODE.ScoreboardTeams do
+			for k,v in ipairs(GAMEMODE.ScoreboardTeams) do
 				scoreboard:CreateTeamPanel(v)
 			end
 		else

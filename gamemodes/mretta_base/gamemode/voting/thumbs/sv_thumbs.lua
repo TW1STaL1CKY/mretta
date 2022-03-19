@@ -10,7 +10,7 @@ net.Receive(_nwThumbs,function(_,pl)
 	local thumbsOnClientNames = string.Split(net.ReadString() or "","|")
 	local thumbsOnClientTimes = string.Split(net.ReadString() or "","|")
 	local thumbsOnClient = {mretta_base = math.huge}
-	for k,v in next,thumbsOnClientNames do
+	for k,v in ipairs(thumbsOnClientNames) do
 		thumbsOnClient[v] = thumbsOnClientTimes[k]
 	end
 
@@ -19,13 +19,13 @@ net.Receive(_nwThumbs,function(_,pl)
 
 	-- Populate thumbsLastUpdates if empty
 	if not next(thumbsLastUpdates) then
-		for k,v in next,folders do
+		for k,v in ipairs(folders) do
 			thumbsLastUpdates[v] = file.Time(string.format(pathFormat,v),"GAME")
 		end
 	end
 
 	local co = coroutine.create(function()
-		for k,v in next,folders do
+		for k,v in ipairs(folders) do
 			if not (pl and pl:IsValid()) then return end
 
 			if not thumbsOnClient[v] or (tonumber(thumbsOnClient[v]) or 0) <= (thumbsLastUpdates[v] or 0) then

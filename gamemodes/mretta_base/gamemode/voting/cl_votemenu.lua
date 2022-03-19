@@ -161,7 +161,7 @@ function PANEL:PerformLayout()
 	local rowCols = 0
 	local rowW2,rowY = 0,0
 
-	for k,v in next,self.OptionControls do
+	for k,v in ipairs(self.OptionControls) do
 		if (k-1) % colsInRows == 0 then
 			rowCols = math.min(numOptions-(colsInRows*currentRow),colsInRows)
 			rowW2 = (calcOptionAxis(rowCols,optionW,spacerSize)-spacerSize)*0.5
@@ -198,7 +198,7 @@ function PANEL:Paint(w,h)
 			local options = _current[_optionListNames[_votingStage]]
 			local topOptions,topVotes = {},0
 
-			for k,v in next,options do
+			for k,v in ipairs(options) do
 				local votes = table.Count(v.Votes)
 				if votes == 0 then continue end
 
@@ -210,7 +210,7 @@ function PANEL:Paint(w,h)
 				end
 			end
 
-			for k,v in next,self.OptionControls do
+			for k,v in ipairs(self.OptionControls) do
 				v:SetCursor("arrow")
 			end
 

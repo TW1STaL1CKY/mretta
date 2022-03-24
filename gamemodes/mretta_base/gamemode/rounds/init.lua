@@ -6,6 +6,7 @@ util.AddNetworkString(_nwComplete)
 util.AddNetworkString(_nwHelpText)
 
 _roundOvertime = false
+_roundAdvancing = false
 _timeCompleteEnd = 0
 
 local function roundsThink()
@@ -79,6 +80,10 @@ function IsInOvertime()
 	return _roundOvertime
 end
 
+function IsAdvancing()
+	return _roundAdvancing
+end
+
 function SetMaxRounds(maxRounds)
 	assert(isnumber(maxRounds),"number expected for argument #1")
 
@@ -131,6 +136,8 @@ function AdvanceRound()
 		return
 	end
 
+	_roundAdvancing = true
+
 	local dontRespawn = hook.Run("PreRoundChange",_currentRound)
 
 	_gameProgress = GAME_PROGRESS_PLAYING
@@ -155,6 +162,8 @@ function AdvanceRound()
 	end
 
 	hook.Run("PostRoundChange",_currentRound)
+
+	_roundAdvancing = false
 
 	-- Enable/Disable round thinking depending on config
 	if _config.RoundTime > 0 then

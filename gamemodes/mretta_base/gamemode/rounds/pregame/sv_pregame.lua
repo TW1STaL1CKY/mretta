@@ -12,13 +12,17 @@ concommand.Add("mretta_ready",function(pl)
 	if not countdownTriggered and not HasGameStarted() and #GetReadyPlayers() >= (_config.MinPlayers or 1) then
 		countdownTriggered = true
 
-		mretta.Print("Enough players have readied, starting game in 5 seconds...")
+		mretta.Print("Enough players have readied, starting game in 10 seconds...")
 
-		timer.Simple(5,function()
+		if mretta_alerts and mretta_alerts.Display then
+			mretta_alerts.Display("Enough players are ready, starting soon...",8,true)
+		end
+
+		timer.Simple(10,function()
 			countdownTriggered = false
 
 			if #GetReadyPlayers() < (_config.MinPlayers or 1) then
-				mretta.Print("Game was not started after 5 seconds, there are no longer enough players...")
+				mretta.Print("Game was not started after 10 seconds, there are no longer enough players...")
 				return
 			end
 

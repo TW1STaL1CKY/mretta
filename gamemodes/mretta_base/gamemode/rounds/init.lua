@@ -118,7 +118,7 @@ function SetHelpText(teamId,helpText)
 	UpdateConfigForClient()
 end
 
-function AddTimeToCurrentRound(seconds)
+function AddTimeToRound(seconds)
 	assert(isnumber(seconds),"number expected for argument #1")
 
 	_timeEnd = (_roundOvertime and CurTime() or _timeEnd)+math.Clamp(seconds,0,2^16-1)

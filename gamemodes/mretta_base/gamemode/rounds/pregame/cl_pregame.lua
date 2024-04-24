@@ -1,23 +1,25 @@
-module("rounds",package.seeall)
+module("rounds", package.seeall)
+
+local ScrW, ScrH = ScrW, ScrH
 
 local pressToReadyText = "Press F2 to ready!"
 
 local hkHud = "rounds_hud_pregame"
 
-hook.Add("HUDPaint",hkHud,function()
+hook.Add("HUDPaint", hkHud, function()
 	if LocalPlayer():Team() != TEAM_SPECTATOR then
-		hook.Remove("HUDPaint",hkHud)
+		hook.Remove("HUDPaint", hkHud)
 	end
 
 	surface.SetFont(mretta.FontLarge)
-	local txtW,txtH = surface.GetTextSize(pressToReadyText)
+	local txtW, txtH = surface.GetTextSize(pressToReadyText)
 
-	local w,h = txtW+(mretta.HudPaddingX*2),txtH+(mretta.HudPaddingY*2)
+	local w, h = txtW + (mretta.HudPaddingX * 2), txtH + (mretta.HudPaddingY * 2)
 
-	mretta.DrawHudPanel(ScrW()-mretta.HudMarginX-w,ScrH()-mretta.HudMarginY-h,w,h,_G.MRETTAHUD_LINE_RIGHT,function()
+	mretta.DrawHudPanel(ScrW() - mretta.HudMarginX - w, ScrH() - mretta.HudMarginY - h, w, h, _G.MRETTAHUD_LINE_RIGHT, function()
 		surface.SetFont(mretta.FontLarge)
-		surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
-		surface.SetTextPos(0,0)
+		surface.SetTextColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
+		surface.SetTextPos(0, 0)
 		surface.DrawText(pressToReadyText)
 	end)
 end)

@@ -33,27 +33,27 @@ include("voting/rtv/sv_rtv.lua")
 include("voting/thumbs/sh_thumbs.lua")
 include("voting/thumbs/sv_thumbs.lua")
 
-hook.Add("Initialize","mretta_server",function()
+hook.Add("Initialize", "mretta_server", function()
 	-- Disallow PAC functionality
 	if GAMEMODE.DisallowPAC then
 		local tag = "mretta_pac"
 
-		hook.Add("PrePACConfigApply",tag,function() return false end)
-		hook.Add("PACApplyModel",tag,function() return false end)
+		hook.Add("PrePACConfigApply", tag, function() return false end)
+		hook.Add("PACApplyModel", tag, function() return false end)
 	end
 
 	-- Disallow Outfitter functionality
 	if GAMEMODE.DisallowOutfitter then
-		hook.Add("OutfitterCyclePlayerModel","mretta_outfitter",function() return false end)
+		hook.Add("OutfitterCyclePlayerModel", "mretta_outfitter", function() return false end)
 	end
 
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
 		local tag = "mretta_sitanywhere"
 
-		hook.Add("HandleSit",tag,function() return false end)
-		hook.Add("ShouldAllowSit",tag,function() return false end)
-		hook.Add("OnGroundSit",tag,function() return false end)
+		hook.Add("HandleSit", tag, function() return false end)
+		hook.Add("ShouldAllowSit", tag, function() return false end)
+		hook.Add("OnGroundSit", tag, function() return false end)
 	else
 		function GAMEMODE:ShouldAllowSit(pl)
 			return not pl:IsSpectating()
@@ -62,32 +62,32 @@ hook.Add("Initialize","mretta_server",function()
 end)
 
 -- MrettaPlayerLoaded hook functionality
-hook.Add("PlayerInitialSpawn","mretta_clientinit",function(pl)
+hook.Add("PlayerInitialSpawn", "mretta_clientinit", function(pl)
 	pl.MrettaConnecting = true
 end)
 
-hook.Add("SetupMove","mretta_clientinit",function(pl,_,cmd)
+hook.Add("SetupMove", "mretta_clientinit", function(pl, _, cmd)
 	if pl.MrettaConnecting and not cmd:IsForced() then
 		pl.MrettaConnecting = nil
-		hook.Run("MrettaPlayerLoaded",pl)
+		hook.Run("MrettaPlayerLoaded", pl)
 	end
 end)
 
 -- Mretta base functionality
-hook.Add("PlayerDisconnected","mretta_emptywatch",function(pl)
-	timer.Simple(1,function()
+hook.Add("PlayerDisconnected", "mretta_emptywatch", function(pl)
+	timer.Simple(1, function()
 		if #player.GetAll() == 0 then
 			-- Server now empty, restart the map so everything starts anew when players return
-			game.ConsoleCommand(string.format("changelevel %s\n",game.GetMap()))
+			game.ConsoleCommand(string.format("changelevel %s\n", game.GetMap()))
 		end
 	end)
 end)
 
-hook.Add("PlayerInitialSpawn","mretta_init",function(pl)
+hook.Add("PlayerInitialSpawn", "mretta_init", function(pl)
 	pl:SetTeam(TEAM_SPECTATOR)
 
 	if pl:IsBot() then
-		concommand.Run(pl,"mretta_ready")
+		concommand.Run(pl, "mretta_ready")
 	end
 end)
 
@@ -107,13 +107,6 @@ function GM:PlayerSpawn(pl)
 	pl:SetUnDuckSpeed(0.1)
 end
 
-function GM:PlayerSpawnAsSpectator(pl)
-	pl:Spectate(OBS_MODE_ROAMING)
-	pl:SetSolid(SOLID_NONE)
-
-	self:PlayerSetModel(pl)
-end
-
 function GM:PlayerSetModel(pl)
 	pl:SetModel(player_manager.TranslatePlayerModel(pl:GetInfo("cl_playermodel")))
 end
@@ -122,11 +115,11 @@ function GM:AllowPlayerPickup(pl)
 	return not pl:IsSpectating()
 end
 
-function GM:PlayerCanPickupWeapon(pl,wep)
+function GM:PlayerCanPickupWeapon(pl, wep)
 	return not pl:IsSpectating()
 end
 
-function GM:PlayerUse(pl,ent)
+function GM:PlayerUse(pl, ent)
 	return not pl:IsSpectating()
 end
 

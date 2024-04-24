@@ -1,4 +1,4 @@
-module("mretta_alerts",package.seeall)
+module("mretta_alerts", package.seeall)
 
 local math = math
 
@@ -9,32 +9,32 @@ DefaultTime = 5
 
 local function alertsHud()
 	if not (_current and (_current.Text or _current.Markup) and _current.TimeEnd and _current.TimeEnd+mretta.HudSlideInOutDur+mretta.HudSlideLineFadeDur > RealTime()) then
-		hook.Remove("HUDPaint",_hkHud)
+		hook.Remove("HUDPaint", _hkHud)
 		return
 	end
-	if hook.Run("HUDDrawAlert",_current) then return end
+	if hook.Run("HUDDrawAlert", _current) then return end
 
-	local w,h = _current.Markup:GetWidth()+(mretta.HudPaddingX*2),_current.Markup:GetHeight()+(mretta.HudPaddingY*2)
+	local w, h = _current.Markup:GetWidth() + (mretta.HudPaddingX * 2), _current.Markup:GetHeight() + (mretta.HudPaddingY * 2)
 
-	mretta.DrawHudScrollInPanel(mretta.HudMarginX,mretta.HudMarginY+140,w,h,_current.TimeStart,_current.TimeEnd,function()
-		_current.Markup:Draw(0,0,TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP)
+	mretta.DrawHudScrollInPanel(mretta.HudMarginX, mretta.HudMarginY + 140, w, h, _current.TimeStart, _current.TimeEnd, function()
+		_current.Markup:Draw(0, 0, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 	end)
 end
 
-function Display(text,seconds,silent)
-	assert(isstring(text),"string expected for argument #1")
+function Display(text, seconds, silent)
+	assert(isstring(text), "string expected for argument #1")
 
 	_current = _current or {}
 
-	_current.Text = text:gsub("</?[^=>]+=[^>]*>",""):gsub("</[^>]+>","")
-	_current.Markup = markup.Parse(string.format("<color=%s><font=%s>%s",table.concat(mretta.HudForeground:ToTable(),","),mretta.FontLarge or "Default",text),ScrW()*0.75)
+	_current.Text = text:gsub("</?[^=>]+=[^>]*>", ""):gsub("</[^>]+>", "")
+	_current.Markup = markup.Parse(string.format("<color=%s><font=%s>%s", table.concat(mretta.HudForeground:ToTable(), ","), mretta.FontLarge or "Default", text), ScrW() * 0.75)
 	_current.TimeStart = RealTime()
 	_current.TimeEnd = _current.TimeStart+(seconds or DefaultTime or 5)
 
-	hook.Add("HUDPaint",_hkHud,alertsHud)
+	hook.Add("HUDPaint", _hkHud, alertsHud)
 
 	if not silent then
-		LocalPlayer():EmitSound("npc/roller/mine/combine_mine_deactivate1.wav",0,90,0.2)
+		LocalPlayer():EmitSound("npc/roller/mine/combine_mine_deactivate1.wav", 0, 90, 0.2)
 	end
 
 	mretta.Print(_current.Text)
@@ -47,10 +47,10 @@ function Clear()
 	_current.TimeEnd = nil
 end
 
-net.Receive("mretta_alerts",function()
+net.Receive("mretta_alerts", function()
 	local text = net.ReadString()
 	local seconds = net.ReadUInt(6)
 	local silent = net.ReadBool()
 
-	Display(text,seconds,silent)
+	Display(text, seconds, silent)
 end)

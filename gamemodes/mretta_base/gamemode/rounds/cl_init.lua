@@ -1,4 +1,4 @@
-module("rounds",package.seeall)
+module("rounds", package.seeall)
 
 local roundTimeNone = "--:--"
 local roundTimeFormat = "%02i:%02i"
@@ -11,10 +11,10 @@ local function roundsThink()
 	if _roundComplete then return end
 
 	local elapsed = GetTimeElapsed()
-	local modu = elapsed%1
+	local modu = elapsed % 1
 
 	if _lastModu > modu then
-		hook.Run("RoundTimeTick",math.floor(GetTimeLeft()),math.floor(elapsed))
+		hook.Run("RoundTimeTick", math.floor(GetTimeLeft()), math.floor(elapsed))
 	end
 
 	_lastModu = modu
@@ -22,7 +22,7 @@ end
 
 _hkHud = "rounds_hud"
 
-net.Receive(_nwConfig,function()
+net.Receive(_nwConfig, function()
 	local maxRounds = net.ReadUInt(8)
 	local roundTime = net.ReadUInt(16)
 	local minPlayers = net.ReadUInt(5)
@@ -35,7 +35,7 @@ net.Receive(_nwConfig,function()
 	_config.HelpText = helpTexts or {}
 end)
 
-net.Receive(_nwUpdate,function()
+net.Receive(_nwUpdate, function()
 	local roundNum = net.ReadUInt(8)
 	local timeStart = net.ReadFloat()
 	local timeEnd = net.ReadFloat()
@@ -44,10 +44,10 @@ net.Receive(_nwUpdate,function()
 
 	local roundCompleted = roundComplete and _roundComplete != roundComplete
 	local roundUpdated = _currentRound != roundNum
-	local timeAdded = timeEnd-_timeEnd
+	local timeAdded = timeEnd - _timeEnd
 
 	if roundUpdated then
-		hook.Run("PreRoundChange",_currentRound)
+		hook.Run("PreRoundChange", _currentRound)
 
 		_gameProgress = (_gameProgress == GAME_PROGRESS_WAITING) and GAME_PROGRESS_PLAYING or _gameProgress
 		_currentRound = roundNum
@@ -64,19 +64,19 @@ net.Receive(_nwUpdate,function()
 		end
 
 		if TriggerHelpText then
-			timer.Simple(0,TriggerHelpText)
+			timer.Simple(0, TriggerHelpText)
 		end
 
 		hook.Run("PostRoundChange",roundNum)
 
 		-- Enable/Disable round thinking depending on config
 		if _config.RoundTime > 0 then
-			hook.Add("Think",_hkThink,roundsThink)
+			hook.Add("Think", _hkThink, roundsThink)
 		else
-			hook.Remove("Think",_hkThink)
+			hook.Remove("Think", _hkThink)
 		end
 	elseif timeAdded != 0 then
-		hook.Run("RoundTimeAdded",timeAdded)
+		hook.Run("RoundTimeAdded", timeAdded)
 	end
 
 	if roundCompleted then
@@ -84,10 +84,10 @@ net.Receive(_nwUpdate,function()
 	end
 end)
 
-net.Receive(_nwComplete,function()
+net.Receive(_nwComplete, function()
 	_gameProgress = GAME_PROGRESS_ENDING
 
-	hook.Remove("HUDPaint",_hkHud)
+	hook.Remove("HUDPaint", _hkHud)
 	hook.Run("GameComplete")
 end)
 
@@ -109,48 +109,48 @@ function TriggerHelpText()
 	if not helpText then return end
 
 	if mretta_alerts then
-		mretta_alerts.Display(helpText,8)
+		mretta_alerts.Display(helpText, 8)
 	else
 		pl:ChatPrint(helpText)
 	end
 end
 
-hook.Add("HUDPaint",_hkHud,function()
+hook.Add("HUDPaint", _hkHud, function()
 	if hook.Run("HUDDrawRoundInfo") then return end
 
 	local gameStarted = HasGameStarted()
 	local timeEnabled = _config.RoundTime > 0
 
 	surface.SetFont(mretta.FontLarge)
-	local timeText = (gameStarted and IsCompleted()) and (GetCompletedReason() or postRoundDefaultText) or (timeEnabled and string.FormattedTime(math.max(_timeEnd-CurTime(),0),roundTimeFormat) or roundTimeNone)
-	local timeW,timeH = surface.GetTextSize(timeText)
+	local timeText = (gameStarted and IsCompleted()) and (GetCompletedReason() or postRoundDefaultText) or (timeEnabled and string.FormattedTime(math.max(_timeEnd-CurTime(), 0), roundTimeFormat) or roundTimeNone)
+	local timeW, timeH = surface.GetTextSize(timeText)
 
 	surface.SetFont(mretta.FontSmall)
-	local roundText = gameStarted and string.format(roundTextFormat,_currentRound,_config.MaxRounds) or preGameText
-	local roundW,roundH = surface.GetTextSize(roundText)
+	local roundText = gameStarted and string.format(roundTextFormat, _currentRound, _config.MaxRounds) or preGameText
+	local roundW, roundH = surface.GetTextSize(roundText)
 
-	local w,h = math.max(timeW,roundW,180)+(mretta.HudPaddingX*2),timeH+roundH+(mretta.HudPaddingY*3)
+	local w, h = math.max(timeW, roundW, 180) + (mretta.HudPaddingX * 2), timeH+roundH + (mretta.HudPaddingY * 3)
 
-	mretta.DrawHudPanel(mretta.HudMarginX,mretta.HudMarginY,w,h,_G.MRETTAHUD_LINE_LEFT,function()
+	mretta.DrawHudPanel(mretta.HudMarginX, mretta.HudMarginY, w, h, _G.MRETTAHUD_LINE_LEFT, function()
 		if gameStarted then
 			surface.SetFont(mretta.FontLarge)
-			surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,timeEnabled and IsInOvertime() and 155+(math.sin(RealTime()*15)*100) or 255)
-			surface.SetTextPos(0,0)
+			surface.SetTextColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, timeEnabled and IsInOvertime() and 155+(math.sin(RealTime()*15)*100) or 255)
+			surface.SetTextPos(0, 0)
 			surface.DrawText(timeText)
 		else
-			surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
+			surface.SetDrawColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
 
-			local t = RealTime()*2.5
-			local dotS,dotSH = 4,2
-			for i=0,5 do
-				surface.DrawRect(dotSH+((1+math.sin(t))*0.5)*roundW,dotSH+((1+math.sin(t*2))*0.5)*(timeH-mretta.HudPaddingY*2)+mretta.HudPaddingY,dotS,dotS)
-				t = t+0.5
+			local t = RealTime() * 2.5
+			local dotS, dotSH = 4, 2
+			for i=0, 5 do
+				surface.DrawRect(dotSH + ((1 + math.sin(t)) * 0.5)*roundW, dotSH + ((1 + math.sin(t * 2)) * 0.5) * (timeH - mretta.HudPaddingY * 2) + mretta.HudPaddingY, dotS, dotS)
+				t = t + 0.5
 			end
 		end
 
 		surface.SetFont(mretta.FontSmall)
-		surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
-		surface.SetTextPos(0,timeH)
+		surface.SetTextColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
+		surface.SetTextPos(0, timeH)
 		surface.DrawText(roundText)
 	end)
 end)

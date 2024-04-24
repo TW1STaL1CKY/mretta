@@ -1,4 +1,4 @@
-module("voting",package.seeall)
+module("voting", package.seeall)
 
 util.AddNetworkString(_nwRtv)
 
@@ -7,13 +7,13 @@ function RtvCheck()
 
 	_rtvPassed = true
 
-	timer.Simple(2,function()
+	timer.Simple(2, function()
 		if rounds then rounds.CompleteGame(true) end
 	end)
 	mretta.Print("RTV vote passed")
 end
 
-concommand.Add("mretta_rtv",function(pl)
+concommand.Add("mretta_rtv", function(pl)
 	if not (pl and pl:IsValid()) then return end
 
 	if _rtvPassed or _votingStage > VOTING_STAGE_NONE then return end
@@ -23,10 +23,10 @@ concommand.Add("mretta_rtv",function(pl)
 	RtvVotes[pl] = true
 
 	net.Start(_nwRtv)
-	net.WriteEntity(pl)
+	net.WritePlayer(pl)
 	net.Broadcast()
 
-	mretta.Print(pl," wants to RTV (",table.Count(RtvVotes)," / ",RtvRequiredVotes(),")")
+	mretta.Print(pl, " wants to RTV (", table.Count(RtvVotes), " / ", RtvRequiredVotes(), ")")
 
 	RtvCheck()
-end,nil,"Adds your vote for wanting to RTV the current minigame.")
+end, nil, "Adds your vote for wanting to RTV the current minigame.")

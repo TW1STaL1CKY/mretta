@@ -18,20 +18,20 @@ include("voting/thumbs/sh_thumbs.lua")
 include("voting/thumbs/cl_thumbs.lua")
 
 -- Adding this because prop_physics_multiplayer doesn't have a killicon by default
-killicon.AddFont("prop_physics_multiplayer","HL2MPTypeDeath","9",Color(255,80,0))
+killicon.AddFont("prop_physics_multiplayer", "HL2MPTypeDeath", "9", Color(255, 80, 0))
 
-hook.Add("Initialize","mretta_client",function()
+hook.Add("Initialize", "mretta_client", function()
 	-- Disallow PAC functionality
 	if GAMEMODE.DisallowPAC then
 		local tag = "mretta_pac"
 
-		hook.Add("PrePACLoadOutfit",tag,function() return false end)
-		hook.Add("PrePACEditorOpen",tag,function() return false end)
+		hook.Add("PrePACLoadOutfit", tag, function() return false end)
+		hook.Add("PrePACEditorOpen", tag, function() return false end)
 	end
 
 	-- Disallow SitAnywhere functionality
 	if GAMEMODE.DisallowSitAnywhere then
-		hook.Add("ShouldSit","mretta_sitanywhere",function() return false end)
+		hook.Add("ShouldSit", "mretta_sitanywhere", function() return false end)
 	end
 
 	-- Disallow Customisable Third-person functionality

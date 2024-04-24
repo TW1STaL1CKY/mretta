@@ -1,4 +1,4 @@
-module("rounds",package.seeall)
+module("rounds", package.seeall)
 
 _G.GAME_PROGRESS_WAITING = 0
 _G.GAME_PROGRESS_PLAYING = 1
@@ -39,15 +39,15 @@ function GetCurrentRound()
 end
 
 function GetRoundsLeft()
-	return (_config.MaxRounds-_currentRound)+1
+	return (_config.MaxRounds - _currentRound) + 1
 end
 
 function GetTimeLeft()
-	return _timeEnd-CurTime()
+	return _timeEnd - CurTime()
 end
 
 function GetTimeElapsed()
-	return CurTime()-_timeStart
+	return CurTime() - _timeStart
 end
 
 function GetHelpText(teamId)
@@ -73,9 +73,9 @@ end
 function GetReadyPlayers()
 	local pls = {}
 
-	for k,v in ipairs(player.GetAll()) do
+	for k, v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) then
-			pls[#pls+1] = v
+			pls[#pls + 1] = v
 		end
 	end
 
@@ -85,9 +85,9 @@ end
 function GetAlivePlayers()
 	local pls = {}
 
-	for k,v in ipairs(player.GetAll()) do
+	for k, v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) and v:Health() > 0 and not v:IsSpectating() then
-			pls[#pls+1] = v
+			pls[#pls + 1] = v
 		end
 	end
 
@@ -98,15 +98,15 @@ function GetTopScoringPlayers(teamId)
 	local pls = {}
 	local topScore = -9999
 
-	for k,v in ipairs(player.GetAll()) do
+	for k, v in ipairs(player.GetAll()) do
 		if IsPlayerReady(v) and (teamId == nil or v:Team() == teamId) then
 			local score = v:Frags()
 
 			if score == topScore then
-				pls[#pls+1] = v
+				pls[#pls + 1] = v
 			elseif score > topScore then
 				topScore = score
-				pls = {v}
+				pls = { v }
 			end
 		end
 	end

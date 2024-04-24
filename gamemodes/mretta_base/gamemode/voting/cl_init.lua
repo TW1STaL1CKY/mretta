@@ -1,4 +1,4 @@
-module("voting",package.seeall)
+module("voting", package.seeall)
 
 local function createVoteMenu()
 	if IsValid(GAMEMODE.ScoreboardPanel) and GAMEMODE.ScoreboardPanel:IsVisible() then
@@ -6,7 +6,7 @@ local function createVoteMenu()
 	end
 
 	if IsValid(_menu) then
-		for k,v in ipairs(_menu.OptionControls) do
+		for k, v in ipairs(_menu.OptionControls) do
 			v:Remove()
 		end
 
@@ -23,28 +23,28 @@ local function createVoteMenu()
 
 	local options = _current[_optionListNames[_votingStage]]
 
-	for k,v in ipairs(options) do
-		local option = vgui.Create("MrettaVoteOption",_menu)
+	for k, v in ipairs(options) do
+		local option = vgui.Create("MrettaVoteOption", _menu)
 		local path
 
 		if _votingStage == VOTING_STAGE_MINIGAME then
-			path = string.format("data/%s%s.jpg",GetMinigameThumbnailsPath(),v.LogicalName)
-			option:SetThumbnail(file.Exists(path,"GAME") and "../"..path or "maps/thumb/noicon.png")
+			path = string.format("data/%s%s.jpg", GetMinigameThumbnailsPath(), v.LogicalName)
+			option:SetThumbnail(file.Exists(path, "GAME") and "../" .. path or "maps/thumb/noicon.png")
 		else
-			path = string.format("maps/thumb/%s.png",v.Name)
-			option:SetThumbnail(file.Exists(path,"GAME") and path or "maps/thumb/noicon.png",true)
+			path = string.format("maps/thumb/%s.png", v.Name)
+			option:SetThumbnail(file.Exists(path, "GAME") and path or "maps/thumb/noicon.png", true)
 		end
 
 		option.StageId = _votingStage
 		option.OptionId = k
 
-		_menu.OptionControls[#_menu.OptionControls+1] = option
+		_menu.OptionControls[#_menu.OptionControls + 1] = option
 	end
 
 	surface.PlaySound("ui/cyoa_ping_available.wav")
 end
 
-net.Receive(_nwUpdate,function()
+net.Receive(_nwUpdate, function()
 	local voteStage = net.ReadUInt(3)
 	local seed = net.ReadUInt(16)
 	local timeEnd = net.ReadFloat()
@@ -59,8 +59,8 @@ net.Receive(_nwUpdate,function()
 	_current.TimeEnd = timeEnd
 	_current[optionListName] = {}
 
-	for k,v in ipairs(options) do
-		local vals = string.Split(v,"|")
+	for k, v in ipairs(options) do
+		local vals = string.Split(v, "|")
 		_current[optionListName][k] = {
 			Name = vals[1],
 			LogicalName = vals[2],
@@ -71,8 +71,8 @@ net.Receive(_nwUpdate,function()
 	createVoteMenu()
 end)
 
-net.Receive(_nwVote,function()
-	local pl = net.ReadEntity()
+net.Receive(_nwVote, function()
+	local pl = net.ReadPlayer()
 	if not (pl and pl:IsValid() and pl:IsPlayer()) then return end
 
 	local stage = net.ReadUInt(3)
@@ -88,9 +88,9 @@ net.Receive(_nwVote,function()
 	options[optionId].Votes[pl] = true
 end)
 
-function Vote(stage,optionId)
-	assert(isnumber(stage),"number expected for argument #1")
-	assert(isnumber(optionId),"number expected for argument #2")
+function Vote(stage, optionId)
+	assert(isnumber(stage), "number expected for argument #1")
+	assert(isnumber(optionId), "number expected for argument #2")
 
 	local options = _current[_optionListNames[stage]]
 	if not (options and options[optionId]) then return end
@@ -103,8 +103,8 @@ function Vote(stage,optionId)
 	options[optionId].VotedFor = true
 
 	net.Start(_nwVote)
-	net.WriteUInt(stage,3)
-	net.WriteUInt(optionId,4)
+	net.WriteUInt(stage, 3)
+	net.WriteUInt(optionId, 4)
 	net.SendToServer()
 
 	return true

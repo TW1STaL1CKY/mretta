@@ -1,13 +1,13 @@
-module("rounds",package.seeall)
+module("rounds", package.seeall)
 
 local countdownTriggered = false
 
-concommand.Add("mretta_ready",function(pl)
+concommand.Add("mretta_ready", function(pl)
 	if not (pl and pl:IsValid()) then return end
 	if IsPlayerReady(pl) then return end
 
 	-- The minigame needs to define what happens to players when they ready up using GM:PrePlayerReadyForMinigame
-	hook.Run("PrePlayerReadyForMinigame",pl)
+	hook.Run("PrePlayerReadyForMinigame", pl)
 
 	if not countdownTriggered and not HasGameStarted() and #GetReadyPlayers() >= (_config.MinPlayers or 1) then
 		countdownTriggered = true
@@ -15,10 +15,10 @@ concommand.Add("mretta_ready",function(pl)
 		mretta.Print("Enough players have readied, starting game in 10 seconds...")
 
 		if mretta_alerts and mretta_alerts.Display then
-			mretta_alerts.Display("Enough players are ready, starting soon...",8,true)
+			mretta_alerts.Display("Enough players are ready, starting soon...", 8, true)
 		end
 
-		timer.Simple(10,function()
+		timer.Simple(10, function()
 			countdownTriggered = false
 
 			if #GetReadyPlayers() < (_config.MinPlayers or 1) then
@@ -44,8 +44,8 @@ concommand.Add("mretta_ready",function(pl)
 		end)
 	end
 
-	hook.Run("PostPlayerReadyForMinigame",pl)
-end,nil,"Tells the server you are ready to play the minigame.")
+	hook.Run("PostPlayerReadyForMinigame", pl)
+end, nil, "Tells the server you are ready to play the minigame.")
 
 function GM:ShowTeam(pl)
 	pl:ConCommand("mretta_ready")

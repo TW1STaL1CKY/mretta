@@ -4,9 +4,9 @@ local function cleanseTable(tbl)
 	while dirty do
 		dirty = false
 
-		for k,v in next,tbl do
+		for k, v in next, tbl do
 			if not IsValid(v) then
-				table.remove(tbl,k)
+				table.remove(tbl, k)
 				dirty = true
 			end
 		end
@@ -24,7 +24,7 @@ PANEL.AvatarSize = 32
 function PANEL:Init()
 	local parent = self:GetParent()
 
-	self:SetSize(IsValid(parent) and parent:GetWide() or 200,self.AvatarSize)
+	self:SetSize(IsValid(parent) and parent:GetWide() or 200, self.AvatarSize)
 	self:SetMouseInputEnabled(true)
 end
 
@@ -35,10 +35,10 @@ function PANEL:SetPlayer(pl)
 		self.AvatarPanel:Remove()
 	end
 
-	self.AvatarPanel = vgui.Create("AvatarImage",self)
-	self.AvatarPanel:SetSize(self.AvatarSize,self.AvatarSize)
-	self.AvatarPanel:SetPos(self.PaddingX,0)
-	self.AvatarPanel:SetPlayer(pl,self.AvatarSize)
+	self.AvatarPanel = vgui.Create("AvatarImage", self)
+	self.AvatarPanel:SetSize(self.AvatarSize, self.AvatarSize)
+	self.AvatarPanel:SetPos(self.PaddingX, 0)
+	self.AvatarPanel:SetPlayer(pl, self.AvatarSize)
 	self.AvatarPanel:SetPaintedManually(true)
 end
 
@@ -47,9 +47,9 @@ function PANEL:DoRightClick()
 
 	local menu = DermaMenu()
 
-	menu:AddOption("Copy SteamID",function() SetClipboardText(self.Player:SteamID()) end)
-	menu:AddOption("Copy SteamID64",function() SetClipboardText(self.Player:SteamID64()) end)
-	menu:AddOption("View Profile",function() self.Player:ShowProfile() end)
+	menu:AddOption("Copy SteamID", function() SetClipboardText(self.Player:SteamID()) end)
+	menu:AddOption("Copy SteamID64", function() SetClipboardText(self.Player:SteamID64()) end)
+	menu:AddOption("View Profile", function() self.Player:ShowProfile() end)
 
 	menu.Think = function()
 		if not (self.Player and self.Player:IsValid()) then
@@ -64,18 +64,18 @@ function PANEL:OnRemove()
 	local parent = self:GetParent()
 
 	if IsValid(parent) and parent.PlayerRows then
-		for k,v in ipairs(parent.PlayerRows) do
+		for k, v in ipairs(parent.PlayerRows) do
 			if v == self then
-				table.remove(parent.PlayerRows,k)
+				table.remove(parent.PlayerRows, k)
 				break
 			end
 		end
 	end
 end
 
-function PANEL:Paint(w,h)
-	surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
-	surface.DrawRect(0,0,w,h)
+function PANEL:Paint(w, h)
+	surface.SetDrawColor(mretta.HudBackground.r, mretta.HudBackground.g, mretta.HudBackground.b, mretta.HudBackground.a)
+	surface.DrawRect(0, 0, w, h)
 
 	if self.Player then
 		if self.Player:IsValid() then
@@ -89,35 +89,35 @@ function PANEL:Paint(w,h)
 			local txt = self.Player:Name()
 
 			surface.SetFont(mretta.FontSmall)
-			local txtW,txtH = surface.GetTextSize(txt)
-			local txtY = (h*0.5)-(txtH*0.5)
+			local txtW, txtH = surface.GetTextSize(txt)
+			local txtY = (h * 0.5) - (txtH * 0.5)
 
-			surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
-			surface.SetTextPos((self.PaddingX*2)+self.AvatarSize,txtY)
+			surface.SetTextColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
+			surface.SetTextPos((self.PaddingX * 2) + self.AvatarSize, txtY)
 			surface.DrawText(txt)
 
-			txt = self.Player:Ping()..pingMeasure
-			txtW,txtH = surface.GetTextSize(txt)
+			txt = self.Player:Ping() .. pingMeasure
+			txtW, txtH = surface.GetTextSize(txt)
 
-			local maxTxtW = surface.GetTextSize("999"..pingMeasure)
-			local txtX = w-self.PaddingX
+			local maxTxtW = surface.GetTextSize("999" .. pingMeasure)
+			local txtX = w - self.PaddingX
 
-			surface.SetTextPos(txtX-txtW,txtY)
+			surface.SetTextPos(txtX - txtW, txtY)
 			surface.DrawText(txt)
 
 			txt = self.Player:Frags()
-			txtW,txtH = surface.GetTextSize(txt)
+			txtW, txtH = surface.GetTextSize(txt)
 
-			txtX = txtX-txtW-maxTxtW-(self.PaddingX*2)
+			txtX = txtX - txtW - maxTxtW - (self.PaddingX * 2)
 
-			surface.SetTextPos(txtX,txtY)
+			surface.SetTextPos(txtX, txtY)
 			surface.DrawText(txt)
 
 			surface.SetAlphaMultiplier(1)
 
 			if self.Player == LocalPlayer() then
-				surface.SetDrawColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
-				surface.DrawRect(0,0,5,h)
+				surface.SetDrawColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
+				surface.DrawRect(0, 0, 5, h)
 			end
 		else
 			-- Only clean up the panel if the Player was defined but is now invalid
@@ -128,7 +128,7 @@ function PANEL:Paint(w,h)
 	return true
 end
 
-derma.DefineControl(controlNameRow,"Player row for Mretta's scoreboard",PANEL,"DLabel")
+derma.DefineControl(controlNameRow, "Player row for Mretta's scoreboard", PANEL, "DLabel")
 
 -- Scoreboard Row-holding Panel
 local controlNamePanel = "MrettaScoreboardPanel"
@@ -141,18 +141,18 @@ PANEL.PaddingX = 24
 PANEL.PaddingY = 12
 
 function PANEL:Init()
-	self:SetSize(500,0)
+	self:SetSize(500, 0)
 
 	self.PlayerRows = {}
 end
 
 function PANEL:CreatePlayerRow(pl)
-	assert(pl and pl:IsValid() and pl:IsPlayer(),"argument #1 is not a valid player entity")
+	assert(pl and pl:IsValid() and pl:IsPlayer(), "argument #1 is not a valid player entity")
 
-	local row = vgui.Create(controlNameRow,self)
+	local row = vgui.Create(controlNameRow, self)
 	row:SetPlayer(pl)
 
-	self.PlayerRows[#self.PlayerRows+1] = row
+	self.PlayerRows[#self.PlayerRows + 1] = row
 
 	return row
 end
@@ -166,16 +166,16 @@ function PANEL:PerformLayout()
 
 	if self.DrawTeamHeader then
 		surface.SetFont(mretta.FontSmall)
-		local _,teamH = surface.GetTextSize("M")
+		local _, teamH = surface.GetTextSize("M")
 
-		totalHeight = teamH+(self.PaddingY*2.5)
+		totalHeight = teamH + (self.PaddingY * 2.5)
 	end
 
-	for k,v in ipairs(self.PlayerRows) do
+	for k, v in ipairs(self.PlayerRows) do
 		v:SetWide(self:GetWide())
-		v:SetPos(0,totalHeight)
+		v:SetPos(0, totalHeight)
 
-		totalHeight = totalHeight+v:GetTall()+(k < #self.PlayerRows and self.PaddingY*0.5 or 0)
+		totalHeight = totalHeight + v:GetTall() + (k < #self.PlayerRows and self.PaddingY * 0.5 or 0)
 	end
 
 	if self:GetTall() == totalHeight then return end
@@ -187,40 +187,40 @@ function PANEL:OnRemove()
 	local parent = self:GetParent()
 
 	if IsValid(parent) and parent.TeamPanels then
-		for k,v in ipairs(parent.TeamPanels) do
+		for k, v in ipairs(parent.TeamPanels) do
 			if v == self then
-				table.remove(parent.TeamPanels,k)
+				table.remove(parent.TeamPanels, k)
 				break
 			end
 		end
 	end
 end
 
-function PANEL:Paint(w,h)
+function PANEL:Paint(w, h)
 	if self.DrawTeamHeader then
 		local teamCount = #team.GetPlayers(self.TeamId)
 
 		surface.SetFont(mretta.FontSmall)
-		local countW,txtH = surface.GetTextSize(teamCount)
+		local countW, txtH = surface.GetTextSize(teamCount)
 
 		local teamCol = team.GetColor(self.TeamId)
 		local readableCol = mretta.GetReadableColor(teamCol)
 
-		surface.SetDrawColor(teamCol.r,teamCol.g,teamCol.b,mretta.HudBackground.a)
-		surface.DrawRect(0,0,w,txtH+(self.PaddingY*2))
+		surface.SetDrawColor(teamCol.r, teamCol.g, teamCol.b, mretta.HudBackground.a)
+		surface.DrawRect(0, 0, w, txtH + (self.PaddingY * 2))
 
-		surface.SetTextColor(readableCol.r,readableCol.g,readableCol.b,readableCol.a)
-		surface.SetTextPos(self.PaddingX,self.PaddingY)
+		surface.SetTextColor(readableCol.r, readableCol.g, readableCol.b, readableCol.a)
+		surface.SetTextPos(self.PaddingX, self.PaddingY)
 		surface.DrawText(team.GetName(self.TeamId))
 
-		surface.SetTextPos(w-self.PaddingX-countW,self.PaddingY)
+		surface.SetTextPos(w - self.PaddingX - countW, self.PaddingY)
 		surface.DrawText(teamCount)
 	end
 
 	return true
 end
 
-derma.DefineControl(controlNamePanel,"Scoreboard's row-holding panel for Mretta",PANEL,"DPanel")
+derma.DefineControl(controlNamePanel, "Scoreboard's row-holding panel for Mretta", PANEL, "DPanel")
 
 -- Scoreboard Base
 local controlNameBase = "MrettaScoreboard"
@@ -232,7 +232,7 @@ PANEL.PaddingY = 12
 PANEL.RefreshInterval = 0.2
 
 function PANEL:Init()
-	self:SetSize(1000,0)
+	self:SetSize(1000, 0)
 	self:SetMouseInputEnabled(true)
 
 	self.TeamPanels = {}
@@ -241,13 +241,13 @@ function PANEL:Init()
 	self.RefreshNext = RealTime()
 
 	surface.SetFont(mretta.FontLarge)
-	local _,largeH = surface.GetTextSize("M")
+	local _, largeH = surface.GetTextSize("M")
 
 	surface.SetFont(mretta.FontSmall)
-	local _,smallH = surface.GetTextSize("M")
+	local _, smallH = surface.GetTextSize("M")
 
-	self.InfoPanelHeight = largeH+smallH+(self.PaddingY*2)
-	self.SpectatorsHeight = smallH+(self.PaddingY*2)
+	self.InfoPanelHeight = largeH + smallH + (self.PaddingY * 2)
+	self.SpectatorsHeight = smallH + (self.PaddingY * 2)
 	self.TitleHeight = largeH
 	self.SubtitleHeight = smallH
 end
@@ -259,24 +259,24 @@ function PANEL:CreateTeamPanel(teamId)
 		self.TeamPanels = {}
 	end
 
-	local panel = vgui.Create(controlNamePanel,self)
+	local panel = vgui.Create(controlNamePanel, self)
 	panel:SetTeam(teamId)
 
-	self.TeamPanels[#self.TeamPanels+1] = panel
+	self.TeamPanels[#self.TeamPanels + 1] = panel
 
 	return panel
 end
 
 function PANEL:RefreshPlayers()
-	self.RefreshNext = RealTime()+self.RefreshInterval
+	self.RefreshNext = RealTime() + self.RefreshInterval
 
-	for k,teamPanel in ipairs(self.TeamPanels) do
+	for k, teamPanel in ipairs(self.TeamPanels) do
 		if not teamPanel.PlayerRows then continue end
 
 		local changesMade = false
 		local pls = {}
 
-		for i,row in ipairs(teamPanel.PlayerRows) do
+		for i, row in ipairs(teamPanel.PlayerRows) do
 			if row.Player and row.Player:IsValid() and row.Player:Team() == teamPanel.TeamId then
 				pls[row.Player] = true
 			else
@@ -292,7 +292,7 @@ function PANEL:RefreshPlayers()
 			cleanseTable(teamPanel.PlayerRows)
 		end
 
-		for i,pl in ipairs(team.GetPlayers(teamPanel.TeamId)) do
+		for i, pl in ipairs(team.GetPlayers(teamPanel.TeamId)) do
 			local frags = pl:Frags()
 			if frags != (pl._sc_lastFrags or 0) then
 				pl._sc_lastFrags = frags
@@ -308,39 +308,39 @@ function PANEL:RefreshPlayers()
 		end
 
 		if changesMade then
-			table.sort(teamPanel.PlayerRows,function(a,b) return a.Player:Frags() > b.Player:Frags() end)
+			table.sort(teamPanel.PlayerRows, function(a, b) return a.Player:Frags() > b.Player:Frags() end)
 			teamPanel:InvalidateLayout()
 		end
 	end
 
 	self.Spectators = {}
-	for k,v in ipairs(team.GetPlayers(TEAM_SPECTATOR)) do
-		self.Spectators[#self.Spectators+1] = v:Name()
+	for k, v in ipairs(team.GetPlayers(TEAM_SPECTATOR)) do
+		self.Spectators[#self.Spectators + 1] = v:Name()
 	end
 end
 
 function PANEL:PerformLayout()
-	local halfW = self:GetWide()*0.5
-	local halfPadX = self.PaddingX*0.5
+	local halfW = self:GetWide() * 0.5
+	local halfPadX = self.PaddingX * 0.5
 
 	--todo: since we are making team panels be only 2 in a row, only use maxHeight for each row
-	local baseHeight = self.InfoPanelHeight+self.PaddingY
+	local baseHeight = self.InfoPanelHeight + self.PaddingY
 	local maxHeight = 0
 
-	for k,v in ipairs(self.TeamPanels) do
-		v:SetWide((k % 2 == 1 and k == #self.TeamPanels) and self:GetWide() or halfW-halfPadX)
-		v:SetPos(k % 2 == 1 and 0 or halfW+halfPadX,baseHeight)
+	for k, v in ipairs(self.TeamPanels) do
+		v:SetWide((k % 2 == 1 and k == #self.TeamPanels) and self:GetWide() or halfW - halfPadX)
+		v:SetPos(k % 2 == 1 and 0 or halfW + halfPadX, baseHeight)
 
 		local tall = v:GetTall()
 		maxHeight = tall > maxHeight and tall or maxHeight
 	end
 
-	local totalHeight = baseHeight+maxHeight+self.SpectatorsHeight+self.PaddingY
+	local totalHeight = baseHeight + maxHeight + self.SpectatorsHeight + self.PaddingY
 
 	if self:GetTall() == totalHeight then return end
 
 	self:SetTall(totalHeight)
-	self:SetY((ScrH()*0.5)-(totalHeight*0.5))
+	self:SetY((ScrH() * 0.5) - (totalHeight * 0.5))
 end
 
 function PANEL:Think()
@@ -353,29 +353,29 @@ function PANEL:Think()
 	end
 end
 
-function PANEL:Paint(w,h)
-	surface.SetDrawColor(mretta.HudBackground.r,mretta.HudBackground.g,mretta.HudBackground.b,mretta.HudBackground.a)
-	surface.DrawRect(0,0,w,self.InfoPanelHeight)
+function PANEL:Paint(w, h)
+	surface.SetDrawColor(mretta.HudBackground.r, mretta.HudBackground.g, mretta.HudBackground.b, mretta.HudBackground.a)
+	surface.DrawRect(0, 0, w, self.InfoPanelHeight)
 
 	surface.SetFont(mretta.FontLarge)
-	surface.SetTextColor(mretta.HudForeground.r,mretta.HudForeground.g,mretta.HudForeground.b,mretta.HudForeground.a)
-	surface.SetTextPos(self.PaddingX,self.PaddingY)
+	surface.SetTextColor(mretta.HudForeground.r, mretta.HudForeground.g, mretta.HudForeground.b, mretta.HudForeground.a)
+	surface.SetTextPos(self.PaddingX, self.PaddingY)
 	surface.DrawText(GAMEMODE.Name)
 
 	surface.SetFont(mretta.FontSmall)
-	surface.SetTextPos(self.PaddingX,self.PaddingY+(self.TitleHeight*0.8))
-	surface.DrawText(string.format("%s with %d players",game.GetMap(),#player.GetAll()))
+	surface.SetTextPos(self.PaddingX, self.PaddingY + (self.TitleHeight * 0.8))
+	surface.DrawText(string.format("%s with %d players", game.GetMap(), #player.GetAll()))
 
-	local y = h-self.SpectatorsHeight
+	local y = h - self.SpectatorsHeight
 
-	surface.DrawRect(0,y,w,self.SpectatorsHeight)
+	surface.DrawRect(0, y, w, self.SpectatorsHeight)
 
 	surface.SetFont(mretta.FontSmall)
-	surface.SetTextPos(self.PaddingX,y+self.PaddingY)
-	surface.DrawText(string.format("%d spectators: %s",#self.Spectators,table.concat(self.Spectators,", ")))
+	surface.SetTextPos(self.PaddingX, y + self.PaddingY)
+	surface.DrawText(string.format("%d spectators: %s",#self.Spectators, table.concat(self.Spectators, ", ")))
 
 	return true
 end
 
-derma.DefineControl(controlNameBase,"Scoreboard for Mretta",PANEL,"DPanel")
+derma.DefineControl(controlNameBase, "Scoreboard for Mretta", PANEL, "DPanel")
 PANEL = nil

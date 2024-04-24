@@ -1,7 +1,7 @@
-module("voting",package.seeall)
+module("voting", package.seeall)
 
 function GetMinigameThumbnailsPath()
-	return mretta.GetRootDataPath().."_thumb/"
+	return mretta.GetRootDataPath() .. "_thumb/"
 end
 
 function RequestMinigameThumbnails()
@@ -13,12 +13,12 @@ function RequestMinigameThumbnails()
 
 	local existingThumbsNames = ""
 	local existingThumbsTimes = ""
-	local existingThumbs = file.Find(thumbsFolder.."*.jpg","DATA")
+	local existingThumbs = file.Find(thumbsFolder .. "*.jpg", "DATA")
 
-	for k,v in ipairs(existingThumbs) do
+	for k, v in ipairs(existingThumbs) do
 		local split = k != #existingThumbs and "|" or ""
-		existingThumbsNames = existingThumbsNames..string.StripExtension(v)..split
-		existingThumbsTimes = existingThumbsTimes..file.Time(thumbsFolder..v,"DATA")..split
+		existingThumbsNames = existingThumbsNames .. string.StripExtension(v) .. split
+		existingThumbsTimes = existingThumbsTimes .. file.Time(thumbsFolder..v, "DATA") .. split
 	end
 
 	net.Start(_nwThumbs)
@@ -27,26 +27,26 @@ function RequestMinigameThumbnails()
 	net.SendToServer()
 end
 
-net.Receive(_nwThumbs,function()
+net.Receive(_nwThumbs, function()
 	local thumbName = net.ReadString()
 	local thumbData = net.ReadData(_maxThumbSize)
 
 	if not (thumbName and thumbData) then return end
 
-	mretta.Print("Received minigame thumbnail for '",thumbName,"', saving...")
+	mretta.Print("Received minigame thumbnail for '", thumbName, "', saving...")
 
-	file.Write(string.format("%s%s.jpg",GetMinigameThumbnailsPath(),thumbName),thumbData)
+	file.Write(string.format("%s%s.jpg", GetMinigameThumbnailsPath(), thumbName), thumbData)
 end)
 
-concommand.Add("mretta_thumbs_cleardata",function()
+concommand.Add("mretta_thumbs_cleardata", function()
 	local path = GetMinigameThumbnailsPath()
 
-	local thumbFiles = file.Find(path.."*.jpg","DATA")
-	for k,v in ipairs(thumbFiles) do
-		file.Delete(path..v)
+	local thumbFiles = file.Find(path .. "*.jpg", "DATA")
+	for k, v in ipairs(thumbFiles) do
+		file.Delete(path .. v)
 	end
-end,nil,"Clears downloaded minigame thumbnails from the data folder.")
+end, nil, "Clears downloaded minigame thumbnails from the data folder.")
 
-hook.Add("InitPostEntity",_nwThumbs,function()
-	timer.Simple(5,RequestMinigameThumbnails)
+hook.Add("InitPostEntity", _nwThumbs, function()
+	timer.Simple(5, RequestMinigameThumbnails)
 end)

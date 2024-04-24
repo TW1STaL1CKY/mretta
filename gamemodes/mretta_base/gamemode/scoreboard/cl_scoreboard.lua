@@ -1,4 +1,4 @@
-module("mretta",package.seeall)
+module("mretta", package.seeall)
 
 function OpenScoreboard()
 	if voting and voting.HasVotingStarted() then return end
@@ -7,10 +7,10 @@ function OpenScoreboard()
 		GAMEMODE.ScoreboardPanel:SetVisible(true)
 	else
 		local scoreboard = vgui.Create("MrettaScoreboard")
-		scoreboard:SetPos((ScrW()*0.5)-(scoreboard:GetWide()*0.5),0)
+		scoreboard:SetPos((ScrW() * 0.5) - (scoreboard:GetWide() * 0.5), 0)
 
 		if istable(GAMEMODE.ScoreboardTeams) then
-			for k,v in ipairs(GAMEMODE.ScoreboardTeams) do
+			for k, v in ipairs(GAMEMODE.ScoreboardTeams) do
 				scoreboard:CreateTeamPanel(v)
 			end
 		else

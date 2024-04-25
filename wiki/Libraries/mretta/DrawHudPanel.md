@@ -29,14 +29,14 @@ Draws a Mretta themed base HUD panel for you to draw into. Requires a 2D drawing
 This will draw a Mretta themed HUD panel containing "Hello world".
 
 ```lua
-hook.Add("HUDPaint","test",function()
-    mretta.DrawHudPanel(400,400,200,100,MRETTAHUD_LINE_LEFT,function()
+hook.Add("HUDPaint", "test", function()
+    mretta.DrawHudPanel(400, 400, 200, 100, MRETTAHUD_LINE_LEFT, function()
         surface.SetFont(mretta.FontLarge)
         surface.SetTextColor(color_white)
-        surface.SetTextPos(0,0)
+        surface.SetTextPos(0, 0)
         surface.DrawText("Hello world")
     end)
 end)
 ```
 
-![Example result](uploads/15ba0762d74ee2387fd1aafa684b7f15/image.png)
+![Example result](https://github.com/TW1STaL1CKY/mretta/blob/develop/wiki/uploads/DrawHudPanel_example.png?raw=true)

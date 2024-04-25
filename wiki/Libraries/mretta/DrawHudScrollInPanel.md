@@ -31,16 +31,16 @@ Draws a Mretta themed base HUD panel for you to draw into, which slides in and o
 One second after execution, this will draw a Mretta themed HUD panel that slides into view, hold for 3 seconds, then slide out of view.
 
 ```lua
-local stamp = RealTime()+1
+local stamp = RealTime() + 1
 
 hook.Add("HUDPaint","test",function()
-    mretta.DrawHudScrollInPanel(400,400,500,100,stamp,stamp+3,function()
+    mretta.DrawHudScrollInPanel(400, 400, 500, 100, stamp, stamp + 3, function()
         surface.SetFont(mretta.FontLarge)
         surface.SetTextColor(color_white)
-        surface.SetTextPos(0,0)
+        surface.SetTextPos(0, 0)
         surface.DrawText("Hello world in sliding form!")
     end)
 end)
 ```
 
-![Example result](uploads/d17ee83bd0fb88b2a1b61dd602f4075f/DrawHudScrollInPanel_example.gif)
+![Example result](https://github.com/TW1STaL1CKY/mretta/blob/develop/wiki/uploads/DrawHudScrollInPanel_example.gif?raw=true)

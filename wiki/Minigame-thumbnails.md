@@ -26,7 +26,7 @@ Here are some steps to get your thumbnail to the lowest filesize possible (using
 ----
 
 ### Example
-![Minigame thumbnail example](https://gitlab.com/TW1STaL1CKY/mretta/-/raw/develop/gamemodes/mretta_base/thumb.jpg "This is an example of a minigame thumbnail. A 300x150 JPG at 17.9KB.")
+![Minigame thumbnail example](https://github.com/TW1STaL1CKY/mretta/blob/develop/gamemodes/mretta_base/thumb.jpg?raw=true "This is an example of a minigame thumbnail. A 300x150 JPG at 17.9KB.")
 
 ----
 

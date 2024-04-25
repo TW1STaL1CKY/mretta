@@ -1,6 +1,6 @@
 ## Mretta
 
-A Fretta-like minigame framework base built for Meta, built from scratch.
+A Fretta-like minigame framework base for Garry's Mod. Built for Metastruct, from scratch.
 
 ----
 
